@@ -120,8 +120,6 @@ $
 ## What is this repo actually doing ?
 Please see the road map section of the README.md to see upcoming functionality and releases of the module.
 
-Please note all this work in this repo will be donated to the Puppetlabs namespace as soon as we have tickets and time allocated to the project.
-
 ## Limitations
 Due to the changes in Kubernetes 1.6 with the auth structure changing to RBAC, the module will only support version 1.6 and above.
 
