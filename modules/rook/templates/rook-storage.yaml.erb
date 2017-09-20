@@ -1,0 +1,16 @@
+apiVersion: rook.io/v1alpha1
+kind: Pool
+metadata:
+  name: replicapool
+  namespace: rook
+spec:
+  replication:
+    size: 1
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+   name: rook-block
+provisioner: rook.io/block
+parameters:
+  pool: replicapool

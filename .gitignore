@@ -1,0 +1,6 @@
+Gemfile.lock
+.vagrant
+.kube/
+.log/
+hieradata/etcd.yaml
+
