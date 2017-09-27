@@ -1,0 +1,1065 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "A template that will launch a Puppet Master and three Kubernetes nodes",
+    "Mappings": {
+        "RegionMap": {
+            "ap-northeast-1": {
+                "kream": "ami-ea4eae8c"
+            },
+            "ap-northeast-2": {
+                "kream": "ami-d28a53bc"
+            },
+            "ap-south-1": {
+                "kream": "ami-099fe766"
+            },
+            "ap-southeast-1": {
+                "kream": "ami-6f198a0c"
+            },
+            "ap-southeast-2": {
+                "kream": "ami-e2021d81"
+            },
+            "ca-central-1": {
+                "kream": "ami-b3d965d7"
+            },
+            "eu-central-1": {
+                "kream": "ami-1e339e71"
+            },
+            "eu-west-1": {
+                "kream": "ami-785db401"
+            },
+            "eu-west-2": {
+                "kream": "ami-996372fd"
+            },
+            "sa-east-1": {
+                "kream": "ami-10186f7c"
+            },
+            "us-east-1": {
+                "kream": "ami-cd0f5cb6"
+            },
+            "us-east-2": {
+                "kream": "ami-10547475"
+            },
+            "us-west-1": {
+                "kream": "ami-09d2fb69"
+            },
+            "us-west-2": {
+                "kream": "ami-6e1a0117"
+            }
+        }
+    },
+    "Outputs": {
+        "AZ": {
+            "Description": "Availability Zone of the newly created EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "PuppetMaster",
+                    "AvailabilityZone"
+                ]
+            }
+        },
+        "PublicDNS": {
+            "Description": "Public DNSName of the newly created PuppetMaster EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "PuppetMaster",
+                    "PublicDnsName"
+                ]
+            }
+        },
+        "PublicDNS": {
+            "Description": "Public DNSName of the newly created KubeMaster EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "KubeMaster",
+                    "PublicDnsName"
+                ]
+            }
+        },
+        "PublicDNS": {
+            "Description": "Public DNSName of the newly created KubeNode01 EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "KubeNode01",
+                    "PublicDnsName"
+                ]
+            }
+        },
+        "PublicDNS": {
+            "Description": "Public DNSName of the newly created KubeNode02 EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "KubeNode02",
+                    "PublicDnsName"
+                ]
+            }
+        },
+        "PublicIP": {
+            "Description": "Public IP address of the newly created PuppetMaster EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "PuppetMaster",
+                    "PublicIp"
+                ]
+            }
+        },
+        "PublicIP": {
+            "Description": "Public IP address of the newly created KubeMaster EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "KubeMaster",
+                    "PublicIp"
+                ]
+            }
+        },
+        "PublicIP": {
+            "Description": "Public IP address of the newly created KubeNode01 EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "KubeNode01",
+                    "PublicIp"
+                ]
+            }
+        },
+        "PublicIP": {
+            "Description": "Public IP address of the newly created KubeNode02 EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "KubeNode02",
+                    "PublicIp"
+                ]
+            }
+        },
+        "SubnetId": {
+            "Description": "Subnet ID for the public subnet",
+            "Value": {
+                "Ref": "PublicSubnet"
+            }
+        },
+        "VPC": {
+            "Description": "VPC ID",
+            "Value": {
+                "Ref": "VPC"
+            }
+        }
+    },
+    "Parameters": {
+        "HostedZoneName": {
+            "Default": "kream.demo",
+            "Description": "The Hosted Zone for the instance",
+            "Type": "String"
+        },
+        "PEInstanceType": {
+            "AllowedValues": [
+                "t2.large",
+                "t2.xlarge",
+                "t2.2xlarge",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.10xlarge",
+                "m4.16xlarge",
+                "cc1.4xlarge",
+                "cc2.8xlarge",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "f1.2xlarge",
+                "f1.16xlarge",
+                "g2.2xlarge",
+                "g2.8xlarge",
+                "p2.xlarge",
+                "p2.8xlarge",
+                "p2.16xlarge",
+                "cg1.4xlarge",
+                "cr1.8xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "r4.large",
+                "r4.xlarge",
+                "r4.2xlarge",
+                "r4.4xlarge",
+                "r4.8xlarge",
+                "r4.16xlarge",
+                "x1.16xlarge",
+                "x1.32xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge",
+                "i3.large",
+                "i3.xlarge",
+                "i3.2xlarge",
+                "i3.4xlarge",
+                "i3.8xlarge",
+                "i3.16xlarge",
+                "hi1.4xlarge",
+                "hs1.8xlarge",
+                "d2.xlarge",
+                "d2.2xlarge",
+                "d2.4xlarge",
+                "d2.8xlarge"
+            ],
+            "ConstraintDescription": "must be a valid instance size for running Puppet Enterprise",
+            "Default": "m4.xlarge",
+            "Description": "Puppet Master EC2 instance type",
+            "Type": "String"
+        },
+        "k8sInstanceType": {
+            "Default": "t2.medium",
+            "Description": "Kubernetes EC2 instance type",
+            "Type": "String"
+        },
+        "KeyPairName": {
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "PuppetMasterHostName": {
+            "Default": "puppet",
+            "Description": "The name of the Puppet Master instance",
+            "Type": "String"
+        },
+        "PuppetMasterDNSName": {
+            "Default": "puppet.kream.demo",
+            "Description": "The DNS name for the Puppet Master instance",
+            "Type": "String"
+        },
+        "PuppetMasterIP": {
+            "Default": "172.17.10.100",
+            "Description": "IP for the Puppet Master",
+            "Type": "String"
+        },
+        "KubeMasterHostName": {
+            "Default": "kube-master",
+            "Description": "The name of Kubernetes Controller instance",
+            "Type": "String"
+        },
+        "KubeMasterDNSName": {
+            "Default": "kube-master.kream.demo",
+            "Description": "The DNS name for the Kubernetes Controller instance",
+            "Type": "String"
+        },
+        "KubeMasterIP": {
+            "Default": "172.17.10.101",
+            "Description": "IP for the Puppet Master",
+            "Type": "String"
+        },
+        "KubeNode01HostName": {
+            "Default": "kube-node-01",
+            "Description": "The name of Kubernetes worker instance",
+            "Type": "String"
+        },
+        "KubeNode01DNSName": {
+            "Default": "kube-node-01.kream.demo",
+            "Description": "The DNS name for the Kubernetes worker instance",
+            "Type": "String"
+        },
+        "KubeNode01IP": {
+            "Default": "172.17.10.102",
+            "Description": "IP for the Kubernetes Controller",
+            "Type": "String"
+        },
+        "KubeNode02HostName": {
+            "Default": "kube-node-02",
+            "Description": "The name of Kubernetes worker instance",
+            "Type": "String"
+        },
+        "KubeNode02DNSName": {
+            "Default": "kube-node-02.kream.demo",
+            "Description": "The DNS name for the Kubernetes worker instance",
+            "Type": "String"
+        },
+        "KubeNode02IP": {
+            "Default": "172.17.10.103",
+            "Description": "IP for the Kubernetes Controller",
+            "Type": "String"
+        },
+        "RemoteAdminCIDR": {
+            "AllowedPattern": "[a-zA-Z0-9]+\\..+",
+            "Default": "0.0.0.0/0",
+            "Description": "CIDR block or IP for SSH access",
+            "Type": "String"
+        },
+        "SubnetCIDR": {
+            "AllowedPattern": "[a-zA-Z0-9]+\\..+",
+            "Default": "172.17.10.0/24",
+            "Description": "CIDR block for the public subnet",
+            "Type": "String"
+        },
+        "VPCCIDR": {
+            "AllowedPattern": "[a-zA-Z0-9]+\\..+",
+            "Default": "172.17.0.0/16",
+            "Description": "CIDR block for the VPC",
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "AttachGateway": {
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                },
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::VPCGatewayAttachment"
+        },
+        "HostedZone": {
+            "Properties": {
+                "HostedZoneConfig": {
+                    "Comment": "This is the PE Master HostedZoneConfiguration"
+                },
+                "Name": {
+                    "Ref": "HostedZoneName"
+                },
+                "VPCs": [
+                    {
+                        "VPCId": {
+                            "Ref": "VPC"
+                        },
+                        "VPCRegion": {
+                            "Ref": "AWS::Region"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::Route53::HostedZone"
+        },
+        "InternetGateway": {
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::InternetGateway"
+        },
+        "PublicRoute": {
+            "Properties": {
+                "DestinationCidrBlock": {
+                    "Ref": "RemoteAdminCIDR"
+                },
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "PublicRouteTable": {
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public Subnet"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::RouteTable"
+        },
+        "PublicSubnet": {
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        1,
+                        {
+                            "Fn::GetAZs": ""
+                        }
+                    ]
+                },
+                "CidrBlock": {
+                    "Ref": "SubnetCIDR"
+                },
+                "MapPublicIpOnLaunch": "true",
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    },
+                    {
+                        "Key": "Role",
+                        "Value": "Public Subnet"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::Subnet"
+        },
+        "PublicSubnetRouteTableAssociation": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "PublicSubnet"
+                }
+            },
+            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+        },
+        "PuppetMaster": {
+            "Properties": {
+                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "kream" ]},
+                "InstanceType": {
+                    "Ref": "PEInstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyPairName"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "DeleteOnTermination": "true",
+                        "DeviceIndex": 0,
+                        "GroupSet": [
+                            {
+                                "Ref": "KreamSecurityGroup"
+                            }
+                        ],
+                        "PrivateIpAddresses": [
+                            {
+                                "Primary": "true",
+                                "PrivateIpAddress": {
+                                    "Ref": "PuppetMasterIP"
+                                }
+                            }
+                        ],
+                        "SubnetId": {
+                            "Ref": "PublicSubnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "PuppetMasterHostName"
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                    "#!/bin/bash -ex", "\n",
+                    "export HOME=/root", "\n",
+                    "LOG_FILE=/var/log/cloudinit/cloud_init.out", "\n",
+                    "mkdir -p `dirname \"$LOG_FILE\"`", "\n",
+                    "touch \"$LOG_FILE\"", "\n",
+                    "chmod 600 \"$LOG_FILE\"", "\n",
+                    "{", "\n",
+                    "\n",
+                    "echo 'Setting custom hostname'", "\n",
+                    "hostname puppet.kream.demo", "\n",
+		            "echo puppet > /etc/hostname", "\n",
+                    "\n",
+                    "private_ip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`", "\n",
+                    "echo $private_ip puppet >> /etc/hosts", "\n",
+                    "echo $private_ip puppet.kream.demo >> /etc/hosts", "\n",
+                    "\n",
+                    "apt-get update -y", "\n",
+                    "apt-get install -y wget build-essential ruby ruby-dev", "\n",
+                    "wget \"https://pm.puppetlabs.com/cgi-bin/download.cgi?dist=ubuntu&rel=16.04&arch=amd64&ver=latest\" -O /root/puppet-installer.tar.gz", "\n",
+                    "tar -xvzf /root/puppet-installer.tar.gz -C /root", "\n",
+                    "\n",
+                    "cat << EOF > /root/pe.conf", "\n",
+                    "{", "\n",
+                    "  \"puppet_enterprise::puppet_master_host\": \"%{::trusted.certname}\"", "\n",
+                    "  \"console_admin_password\": \"KreamRocks\"", "\n",
+                    "  \"pe_install::puppet_master_dnsaltnames\": [\"puppet\"]", "\n",
+                    "}", "\n",
+                    "EOF", "\n",
+                    "\n",
+                    "cd /root/puppet-enterprise-* && ./puppet-enterprise-installer -c /root/pe.conf", "\n",
+                    "\n",
+                    "sed -i -e 's/common/global/' /etc/puppetlabs/puppet/hiera.yaml", "\n",
+                    "\n",
+                    "echo '*.kream.demo' > /etc/puppetlabs/puppet/autosign.conf", "\n",
+                    "\n",
+                    "mkdir -p /etc/puppetlabs/puppetserver/ssh/", "\n",
+                    "cat << EOF > /etc/puppetlabs/puppetserver/ssh/id_rsa", "\n",
+                    "-----BEGIN RSA PRIVATE KEY-----", "\n",
+                    "MIIEpAIBAAKCAQEAxuCm90fCZ5blrX/o8MKnQLZMtgLKpzRSJdX4LtcJxSoZuMVI", "\n",
+                    "qjTYXG2QGufGhBrHz0zW+si69zU9fIySdmxRyUwVcBERc+c7dOeMr3Qi92D24vU8", "\n",
+                    "akKtjS1cZ8A2cq5ChF4NzM53/YJHOGSqEgkpVNu26NuhoL38GCFKALAiIOAZ01Rv", "\n",
+                    "fBHtAPnvuMn0VvQIstKRmlaaTGC2tC9EhSZaurg3QUYCe8KIZAcDLxopWCbNVGiz", "\n",
+                    "J673bTEUubjIMet2EDMhbAuGI2mOeUhalx8Dpf/WvI9F/6rDDUpAq5cB3db+3C4n", "\n",
+                    "ePwzFi5yFf5EDRubM3QyXjciWMTuDfZvtyjhGQIDAQABAoIBACNsNjELNgQva19Y", "\n",
+                    "zgu8EABFuCofGytm9U7J6relE5drpUM02HmAih0EYst4BvLWtkolHJF0mWCYugfq", "\n",
+                    "Hdg7+OFKzPK2B47GW9+5smQ54lR/j9ni5kzi7Xic4L2WDdylTzG2cuzMxbCAuODB", "\n",
+                    "hU1LFnKH4+9b11EDJdjCbSTsOlfyYfBmeJeoW+xJPoMFwcU4pwvRC2VjYiFP0L/5", "\n",
+                    "tfGKf+JtjQ98xUc8SbC7b1AAqQAAEiQnJNf0NIR7ROs2E2doWuKMNoKWu4wsu3sF", "\n",
+                    "qljBpTj3HpnFGnRuKjxt5ynlLy2pbdmnx6awbdGqQmRbDgAx89M3663bC3wVw6hU", "\n",
+                    "obETrxUCgYEA8oeb64Kxo3XXkGVG7jr+WVpJ03jDgb8zYGzs3hFxx3uuFChu25bX", "\n",
+                    "s7bfCbCv9Kz3C4IfkPoozI+g9fXGHo3zJfftNaT9ewOdSRBnilpOMBPLRrTtjPDo", "\n",
+                    "cRvCJE5CbWQNhusg4qVOF/zaf43E0DvQwKmrtouPXk6XgEQl4phpHScCgYEA0exg", "\n",
+                    "v33tiCRn8RhshvnZCYmdFwec+bOJGEMgUj9//1LVbSKU3BwKD+O3tYUrkiVXJFov", "\n",
+                    "fw2iqtbmkC6ITlTTknXDO7LDbm35w3PGUBBXBbxZX005ojdAfwU+m2/auuFU5O/E", "\n",
+                    "GbjmkSEW+mRQS/EMqDPzctunMCgQWqP6ODW5d78CgYEAnP4pcRcl1DD4/DCC7L1l", "\n",
+                    "XgOzHF/k9n0FTdrUrZ9PLpkiA0x1DlIjiOLMl+I21ESOmnV954P3mwsyX2Tb/XVX", "\n",
+                    "uvE1LO+DYfjh/KTQ0V9Jk5eMk1WVHBHp9SXJ02SRXWxR0U8s92mYFrEH41+q0jyW", "\n",
+                    "EdEDJWRLxvlK2q3CdF7CVCsCgYBl+/+YqHYgoQc6UxJOlM1DW+7MhG9XxEhDWEE4", "\n",
+                    "lA78HOMBLT7CnICq7YePkU30p11plMLkZ9xyQQssWt7vpzhOPBYIR7W4TYd81B8x", "\n",
+                    "QG72o2WL7jmkvFECJKsg2ruZ9OTIgE9166VgNoIyTU/RRR9QDEUmtN3JgH1Je8aR", "\n",
+                    "TlB3gwKBgQCYTXrQixSgV49Rht9nUQTGkiTca8FejkFUExXIa6evSvkweyit1INA", "\n",
+                    "t3Mor0xcKq7DgKbS6Oy9KeWxwsiHPsY4is1Xnrg6rse5DyDQn13UZCO/P5aPo1GC", "\n",
+                    "FrC6weuSLEuKDO2C2znmw1SS8bxdQp6e1XpSOgc+7phJGS0tchBbOQ==", "\n",
+                    "-----END RSA PRIVATE KEY-----", "\n",
+                    "EOF", "\n",
+                    "\n",
+                    "chown -R pe-puppet:pe-puppet /etc/puppetlabs/puppetserver/ssh/id_rsa", "\n",
+                    "chmod 600 /etc/puppetlabs/puppetserver/ssh/id_rsa", "\n",
+                    "/opt/puppetlabs/puppet/bin/gem install ncedit puppetclassify", "\n",
+                    "\n",
+                    "cat << EOF > /root/classify.rb", "\n",
+                    "#!/opt/puppetlabs/puppet/bin/ruby", "\n",
+                    "\n",
+                    "require 'puppetclassify'", "\n",
+                    "\n",
+                    "def initialize_puppetclassify", "\n",
+                    "  hostname = \"puppet.kream.demo\"", "\n",
+                    "  rest_api_url = \"https://#{hostname}:4433/classifier-api\"", "\n",
+                    "\n",
+                    "  if %x{facter -p pe_server_version} =~ /\\w*/", "\n",
+                    "    # PE 2015x", "\n",
+                    "    ssl_dir     = '/etc/puppetlabs/puppet/ssl'", "\n",
+                    "    ca_cert     = \"#{ssl_dir}/ca/ca_crt.pem\"", "\n",
+                    "    cert_name   = hostname", "\n",
+                    "    cert        = \"#{ssl_dir}/certs/#{cert_name}.pem\"", "\n",
+                    "    private_key = \"#{ssl_dir}/private_keys/#{cert_name}.pem\"", "\n",
+                    "  else", "\n",
+                    "    cert_dir    = '/opt/puppet/share/puppet-dashboard/certs'", "\n",
+                    "    ca_cert     = \"#{cert_dir}/ca_cert.pem\"", "\n",
+                    "    cert_name   = 'pe-internal-dashboard'", "\n",
+                    "    cert        = \"#{cert_dir}/#{cert_name}.cert.pem\"", "\n",
+                    "    private_key = \"#{cert_dir}/#{cert_name}.private_key.pem\"", "\n",
+                    "  end", "\n",
+                    "  auth_info = {", "\n",
+                    "    'ca_certificate_path' => ca_cert,", "\n",
+                    "    'certificate_path'    => cert,", "\n",
+                    "    'private_key_path'    => private_key,", "\n",
+                    "  }", "\n",
+                    "", "\n",
+                    "  puppetclassify = PuppetClassify.new(rest_api_url, auth_info)", "\n",
+                    "  puppetclassify", "\n",
+                    "end", "\n",
+                    "\n",
+                    "def define_platform_classes", "\n",
+                    "  platform_classes = Array.new", "\n",
+                    "  platform_classes.push('pe_repo::platform::ubuntu_1604_amd64')", "\n",
+                    "  platform_classes", "\n",
+                    "end", "\n",
+                    "\n",
+                    "puppetclassify = initialize_puppetclassify", "\n",
+                    "\n",
+                    "platform_classes = define_platform_classes", "\n",
+                    "\n",
+                    "pe_master_group_id = puppetclassify.groups.get_group_id('PE Master')", "\n",
+                    "pe_master_group = puppetclassify.groups.get_group(pe_master_group_id)", "\n",
+                    "\n",
+                    "node_group_classes = Hash.new", "\n",
+                    "\n",
+                    "platform_classes.each do |platform_class_name|", "\n",
+                    "  platform_class = puppetclassify.classes.get_environment_class('production', platform_class_name)", "\n",
+                    "  node_group_classes[platform_class['name']] = {}", "\n",
+                    "end", "\n",
+                    "\n",
+                    "node_group_delta = {", "\n",
+                    "  'id'      => pe_master_group_id,", "\n",
+                    "  'classes' => node_group_classes", "\n",
+                    "}", "\n",
+                    "\n",
+                    "puppetclassify.groups.update_group(node_group_delta)", "\n",
+                    "\n",
+                    "as_group_id = puppetclassify.groups.get_group_id('Agent-specified environment')", "\n",
+                    "as_group = puppetclassify.groups.get_group(as_group_id)", "\n",
+                    "\n",
+                    "as_group[\"rule\"] = [\"and\", [\"~\", [\"fact\", \"fqdn\"], \".*\"]]", "\n",
+                    "\n",
+                    "puppetclassify.groups.update_group(as_group)", "\n",
+                    "EOF", "\n",
+                    "chmod +x /root/classify.rb", "\n",
+                    "/root/classify.rb", "\n",
+                    "cat << EOF > /root/batch.yaml", "\n",
+                    "\"PE Master\":", "\n",
+                    "  \"classes\":", "\n",
+                    "    \"puppet_enterprise::profile::master\":", "\n",
+                    "       \"code_manager_auto_configure\": true", "\n",
+                    "       \"r10k_remote\": \"git@github.com:puppetlabs/kream-control-repo.git\"", "\n",
+                    "       \"r10k_private_key\": \"/etc/puppetlabs/puppetserver/ssh/id_rsa\"", "\n",
+                    "EOF", "\n",
+                    "/opt/puppetlabs/puppet/bin/ncedit batch --smart-update --yaml-file /root/batch.yaml", "\n",
+                    "echo KreamRocks | /opt/puppetlabs/bin/puppet-access login --username admin --service-url https://puppet:4433/rbac-api --lifetime 10y", "\n",
+                    "/opt/puppetlabs/bin/puppet-code deploy demo -w", "\n",
+		            "mkdir -p /root/.ssh", "\n",
+		            "cat << EOF > /root/.ssh/id_rsa", "\n",
+                    "-----BEGIN RSA PRIVATE KEY-----", "\n",
+                    "MIIEowIBAAKCAQEA7xd8oAwuT5vDKfean3FjoU8hwnFbFSFaixglvd9n5a07PwJA", "\n",
+                    "BbL6kA5p31YbfIBZevFjPRQMq4Ke4103UwY1dZVoHykPU7IvvIfnJRAvvx7Mzj4G", "\n",
+                    "/BmsX0lISbjbL2KNg9d83nvX10RUxFJw/YQJHdg1LcIK5R8MkIDz8M+TYNG9ErSx", "\n",
+                    "n/AWCWaJhiiA7lbVZL9wZi4BRx+IUVxKdhkHazXQO/xj7V85mTh3721E4cJCpoIl", "\n",
+                    "Y8OWOE1klzUHV9VK5SGcXu7a2janGxOO3kR8BoPgGpGPwS1Ccm3tgoS50qcwMUPk", "\n",
+                    "WbuG5J7xuwdP0sE2UqAVxCzfWwccARA7Dw/+5wIDAQABAoIBAQDhtc18FiO+GbDj", "\n",
+                    "tJEvBk9k4BxhwLuYthURDKnMltQxmhk9QXWJK86pIkJGibaHEW/nxWvHJF9Vpoky", "\n",
+                    "4TQyV8EuEO7rw8ppW+T+2VmXvrEkfwIfjaTwZ5g3mCn7Ft0s3Z/1IAAM1OMNoL9Z", "\n",
+                    "Wu66FeS5XPvPB8lbRbWJ0YL5Ciz6jxLZg2/moeyjoqRdPmfZSBUp8AW/hnqwc3zM", "\n",
+                    "DwV6xWwDwzm5NQFdfcr6XJ8SxvX4IS+SaDkxpYiUVEJtEYMgoGsRRnxkQSAI2wKy", "\n",
+                    "NfTewsXtpSPfUI2TXOeS2tOoh6kPgt+5qCZgwZ2hXGg1qr5QCrFQCY9lVWo9YnT0", "\n",
+                    "d0BTaB8hAoGBAP7fB2NLBoESN0Vtwv7NJfe3CuN4Dxcxn3OqkSeHEIwlFt1D4eAE", "\n",
+                    "08d8YtoUVsDCkaUmPsv+iDBLHDzM6RrrXHuoAD4T3LeGJWBvfEPeHke3jH4DKnZh", "\n",
+                    "hHJunNzMio4A9hqk9prybh0+CDI2gr4qw4HtEzcKEx9kInSW8d3Yx1txAoGBAPAm", "\n",
+                    "kTvNbQRm3K0PB5BbSzaj/04Kv8PvGd07aBWMg1uYJrrxH9A6Qs8u1u0u/2yaM4Ag", "\n",
+                    "7wkQsbvC17GQeb6Tm97CxzdDP5HPqrG2roFr+QzR5+wb8bo502UIorDsjI0Al/vD", "\n",
+                    "bQTpTIRwVH7vWNyayIIKg/8xP6Qnv8fleR1Z3ePXAoGACypMEY5813Sr1S/MxgrI", "\n",
+                    "qgRrxrFAv/xdhtynBTtGf000pjbOE1lCyc9qKTGQ51retIRrZdZdsvfnYcZ8Q8Ch", "\n",
+                    "yYz/jbijB6spwgLAR9zYKL4iunZ7CrqU6cpstsODIltqbJpjb0BFkKRiCYkXyyrm", "\n",
+                    "a6+uEtAvLEXfuInQSK6xdRECgYAhjBGvu/OlsMTU/At/c/Fe0awBd+jv8v+28uyI", "\n",
+                    "ThevfOK0LKjYCrt4e7+UZINT5XqaRH9/0bAyXXaKHHeVUsNsa+MuahuAP/VFXBKm", "\n",
+                    "i7G/w7bVOdYbwKYyL/GiK3k63UFd7x/Uls6UlaiIDuFn98tYtyVXScbtJIxa3Uh8", "\n",
+                    "/CfOAwKBgFtDVzxmJD4s3a08txWZbOXBGeYZOY9J+dk290hECjSlbmUlUdILNgNE", "\n",
+                    "KsTQxnp+0VCPblziUxZBD8G5FZCEMDnZISqw4lh4dT7fq4OPhS4jpiSuA2kGN/EW", "\n",
+                    "DPZvZpgkfXMwNSR0pL5ITBQTK0CjoLTrsz25wJfHu8rBcapdzOfq", "\n",
+                    "-----END RSA PRIVATE KEY-----", "\n",
+        		    "EOF", "\n",
+        		    "\n",
+        		    "chmod 600 /root/.ssh/id_rsa", "\n",
+        		    "cat << EOF > /root/.ssh/known_hosts", "\n",
+        		    "|1|8wZgunsEVnS5a+iucQG13/BsgBk=|4+rLc1zO1/eR5wlWcF1KayrAtVU= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJTBmuexXdoFB48rJnTUtbWrkHBwEt6O/EkXfzskMw15A0UnTu9Eenp7JBhIpZoGDQcUNSlbs0jK2zNz8qzPM+k=", "\n",
+        		    "EOF", "\n",
+        		    "\n",
+                    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.101 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=demo'", "\n",
+        		    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.102 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=demo'", "\n",
+        		    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.103 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=demo'", "\n",
+        		    "touch /tmp/cloudinit.complete", "\n",
+                            "} > $LOG_FILE 2>&1", "\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+        },
+        "KubeMaster": {
+            "Properties": {
+                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "kream" ]},
+                "InstanceType": {
+                    "Ref": "k8sInstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyPairName"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "DeleteOnTermination": "true",
+                        "DeviceIndex": 0,
+                        "GroupSet": [
+                            {
+                                "Ref": "KreamSecurityGroup"
+                            }
+                        ],
+                        "PrivateIpAddresses": [
+                            {
+                                "Primary": "true",
+                                "PrivateIpAddress": {
+                                    "Ref": "KubeMasterIP"
+                                }
+                            }
+                        ],
+                        "SubnetId": {
+                            "Ref": "PublicSubnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "KubeMasterHostName"
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -x", "\n",
+                                "apt-get -y update", "\n",
+                                "apt-get install ruby-dev", "\n",
+                                "export HOME=/root", "\n",
+                                "LOG_FILE=/var/log/cloudinit/cloud_init.out", "\n",
+                                "mkdir -p `dirname \"$LOG_FILE\"`", "\n",
+                                "touch \"$LOG_FILE\"", "\n",
+                                "chmod 600 \"$LOG_FILE\"", "\n",
+                                "{", "\n",
+                                "\n",
+                                "echo 'Setting custom hostname'", "\n",
+                                "hostname kube-master.kream.demo", "\n",
+		                        "echo kube-master > /etc/hostname", "\n",
+                                "\n",
+                                "private_ip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`", "\n",
+                                "echo $private_ip kube-master >> /etc/hosts", "\n",
+                                "echo $private_ip kube-master.kream.demo >> /etc/hosts", "\n",
+                                "echo $private_ip kubernetes >> /etc/hosts", "\n",
+                                "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
+                                "\n",
+				                "mkdir -p /root/.ssh", "\n",
+                                "cat << EOF > /root/.ssh/authorized_keys", "\n",
+                                "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDvF3ygDC5Pm8Mp95qfcWOhTyHCcVsVIVqLGCW932flrTs/AkAFsvqQDmnfVht8gFl68WM9FAyrgp7jXTdTBjV1lWgfKQ9Tsi+8h+clEC+/HszOPgb8GaxfSUhJuNsvYo2D13zee9fXRFTEUnD9hAkd2DUtwgrlHwyQgPPwz5Ng0b0StLGf8BYJZomGKIDuVtVkv3BmLgFHH4hRXEp2GQdrNdA7/GPtXzmZOHfvbUThwkKmgiVjw5Y4TWSXNQdX1UrlIZxe7traNqcbE47eRHwGg+AakY/BLUJybe2ChLnSpzAxQ+RZu4bknvG7B0/SwTZSoBXELN9bBxwBEDsPD/7n", "\n",
+                                "EOF", "\n",
+				                "chmod 664 /root/.ssh/authorized_keys", "\n",
+                                "\n",
+                                "touch /tmp/cloudinit.complete", "\n",
+                                "} > $LOG_FILE 2>&1", "\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+          },
+        "KubeNode01": {
+            "Properties": {
+                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "kream" ]},
+                "InstanceType": {
+                    "Ref": "k8sInstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyPairName"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "DeleteOnTermination": "true",
+                        "DeviceIndex": 0,
+                        "GroupSet": [
+                            {
+                                "Ref": "KreamSecurityGroup"
+                            }
+                        ],
+                        "PrivateIpAddresses": [
+                            {
+                                "Primary": "true",
+                                "PrivateIpAddress": {
+                                    "Ref": "KubeNode01IP"
+                                }
+                            }
+                        ],
+                        "SubnetId": {
+                            "Ref": "PublicSubnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "KubeNode01HostName"
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                              "#!/bin/bash -x", "\n",
+                              "\n",
+                              "apt-get -y update", "\n",
+                              "apt-get install ruby-dev", "\n",
+                              "export HOME=/root", "\n",
+                              "LOG_FILE=/var/log/cloudinit/cloud_init.out", "\n",
+                              "mkdir -p `dirname \"$LOG_FILE\"`", "\n",
+                              "touch \"$LOG_FILE\"", "\n",
+                              "chmod 600 \"$LOG_FILE\"", "\n",
+                              "{", "\n",
+                              "\n",
+                              "echo 'Setting custom hostname'", "\n",
+                              "hostname kube-node-01.kream.demo", "\n",
+		              "echo kube-node-01 > /etc/hostname", "\n",
+                              "\n",
+                              "private_ip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`", "\n",
+                              "echo $private_ip kube-node-01 >> /etc/hosts", "\n",
+		              "echo $private_ip kube-node-01.kream.demo >> /etc/hosts", "\n",
+			      "echo 172.17.10.101 kube-master >> /etc/hosts", "\n",
+                              "echo 172.17.10.101 kube-master.kream.demo >> /etc/hosts", "\n",
+                              "echo 172.17.10.101 kubernetes >> /etc/hosts", "\n",
+		              "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
+                              "\n",
+			      "mkdir -p /root/.ssh", "\n",
+                              "cat << EOF > /root/.ssh/authorized_keys", "\n",
+                              "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDvF3ygDC5Pm8Mp95qfcWOhTyHCcVsVIVqLGCW932flrTs/AkAFsvqQDmnfVht8gFl68WM9FAyrgp7jXTdTBjV1lWgfKQ9Tsi+8h+clEC+/HszOPgb8GaxfSUhJuNsvYo2D13zee9fXRFTEUnD9hAkd2DUtwgrlHwyQgPPwz5Ng0b0StLGf8BYJZomGKIDuVtVkv3BmLgFHH4hRXEp2GQdrNdA7/GPtXzmZOHfvbUThwkKmgiVjw5Y4TWSXNQdX1UrlIZxe7traNqcbE47eRHwGg+AakY/BLUJybe2ChLnSpzAxQ+RZu4bknvG7B0/SwTZSoBXELN9bBxwBEDsPD/7n", "\n",
+                              "EOF", "\n",
+			      "chmod 664 /root/.ssh/authorized_keys", "\n",
+                              "\n",
+                              "touch /tmp/cloudinit.complete", "\n",
+                              "} > $LOG_FILE 2>&1", "\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+          },
+        "KubeNode02": {
+            "Properties": {
+                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "kream" ]},
+                "InstanceType": {
+                    "Ref": "k8sInstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyPairName"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "DeleteOnTermination": "true",
+                        "DeviceIndex": 0,
+                        "GroupSet": [
+                            {
+                                "Ref": "KreamSecurityGroup"
+                            }
+                        ],
+                        "PrivateIpAddresses": [
+                            {
+                                "Primary": "true",
+                                "PrivateIpAddress": {
+                                    "Ref": "KubeNode02IP"
+                                }
+                            }
+                        ],
+                        "SubnetId": {
+                            "Ref": "PublicSubnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "KubeNode02HostName"
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                             "#!/bin/bash -x", "\n",
+                             "\n",
+                             "apt-get -y update", "\n",
+                             "apt-get install ruby-dev", "\n",
+                             "export HOME=/root", "\n",
+                             "LOG_FILE=/var/log/cloudinit/cloud_init.out", "\n",
+                             "mkdir -p `dirname \"$LOG_FILE\"`", "\n",
+                             "touch \"$LOG_FILE\"", "\n",
+                             "chmod 600 \"$LOG_FILE\"", "\n",
+                             "{", "\n",
+                             "\n",
+                             "echo 'Setting custom hostname'", "\n",
+                             "hostname kube-node-02.kream.demo", "\n",
+		             "echo kube-node-02 > /etc/hostname", "\n",
+                             "\n",
+                             "private_ip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`", "\n",
+                             "echo $private_ip kube-node-02 >> /etc/hosts", "\n",
+		             "echo $private_ip kube-node-02.kream.demo >> /etc/hosts", "\n",
+			     "echo 172.17.10.101 kube-master >> /etc/hosts", "\n",
+                             "echo 172.17.10.101 kube-master.kream.demo >> /etc/hosts", "\n",
+                             "echo 172.17.10.101 kubernetes >> /etc/hosts", "\n",
+		             "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
+                             "\n",
+			     "mkdir -p /root/.ssh", "\n",
+                             "cat << EOF > /root/.ssh/authorized_keys", "\n",
+                             "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDvF3ygDC5Pm8Mp95qfcWOhTyHCcVsVIVqLGCW932flrTs/AkAFsvqQDmnfVht8gFl68WM9FAyrgp7jXTdTBjV1lWgfKQ9Tsi+8h+clEC+/HszOPgb8GaxfSUhJuNsvYo2D13zee9fXRFTEUnD9hAkd2DUtwgrlHwyQgPPwz5Ng0b0StLGf8BYJZomGKIDuVtVkv3BmLgFHH4hRXEp2GQdrNdA7/GPtXzmZOHfvbUThwkKmgiVjw5Y4TWSXNQdX1UrlIZxe7traNqcbE47eRHwGg+AakY/BLUJybe2ChLnSpzAxQ+RZu4bknvG7B0/SwTZSoBXELN9bBxwBEDsPD/7n", "\n",
+                             "EOF", "\n",
+			     "chmod 664 /root/.ssh/authorized_keys", "\n",
+                             "\n",
+                             "touch /tmp/cloudinit.complete", "\n",
+                             "} > $LOG_FILE 2>&1", "\n"
+			    ]
+                        ]
+                    }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+          },
+        "PuppetMasterDNSRecord": {
+            "DependsOn": "HostedZone",
+            "Properties": {
+                "HostedZoneId": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "/hostedzone/",
+                            {
+                                "Ref": "HostedZone"
+                            }
+                        ]
+                    ]
+                },
+                "Name": { "Ref": "PuppetMasterDNSName" },
+                "ResourceRecords": [{ "Ref": "PuppetMasterIP" }],
+                "TTL": "900",
+                "Type": "A"
+            },
+            "Type": "AWS::Route53::RecordSet"
+        },
+        "KubeMasterDNSRecord": {
+            "DependsOn": "HostedZone",
+            "Properties": {
+                "HostedZoneId": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "/hostedzone/",
+                            {
+                                "Ref": "HostedZone"
+                            }
+                        ]
+                    ]
+                },
+                "Name": "kube-master.kream.demo",
+                "ResourceRecords": [{ "Ref": "KubeMasterIP"}],
+                "TTL": "900",
+                "Type": "A"
+            },
+            "Type": "AWS::Route53::RecordSet"
+        },
+        "KubeNode01DNSRecord": {
+            "DependsOn": "HostedZone",
+            "Properties": {
+                "HostedZoneId": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "/hostedzone/",
+                            {
+                                "Ref": "HostedZone"
+                            }
+                        ]
+                    ]
+                },
+                "Name" : "kube-node-01.kream.demo",
+                "ResourceRecords": [{ "Ref": "KubeNode01IP"}],
+                "TTL": "900",
+                "Type": "A"
+            },
+            "Type": "AWS::Route53::RecordSet"
+        },
+        "KubeNode02DNSRecord": {
+            "DependsOn": "HostedZone",
+            "Properties": {
+                "HostedZoneId": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "/hostedzone/",
+                            {
+                                "Ref": "HostedZone"
+                            }
+                        ]
+                    ]
+                },
+                "Name": "kube-node-02.kream.demo",
+                "ResourceRecords": [{ "Ref": "KubeNode02IP"}],
+                "TTL": "900",
+                "Type": "A"
+            },
+            "Type": "AWS::Route53::RecordSet"
+        },
+        "KreamSecurityGroup": {
+            "Properties": {
+                "GroupDescription": "Enables access to kream",
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": {
+                            "Ref": "VPCCIDR"
+                        },
+                        "FromPort": "0",
+                        "IpProtocol": "tcp",
+                        "ToPort": "65535"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "RemoteAdminCIDR"
+                        },
+                        "FromPort": "22",
+                        "IpProtocol": "tcp",
+                        "ToPort": "22"
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "RemoteAdminCIDR"
+                        },
+                        "FromPort": "443",
+                        "IpProtocol": "tcp",
+                        "ToPort": "443"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "VPC": {
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "VPCCIDR"
+                },
+                "EnableDnsHostnames": "true",
+                "EnableDnsSupport": "true",
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "VPN Connected VPC"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::VPC"
+        }
+    }
+}
