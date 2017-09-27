@@ -22,7 +22,8 @@ class kubernetes::kube_addons (
   exec { 'Install cni network provider':
     command => "kubectl apply -f ${cni_network_provider}",
     onlyif  => 'kubectl get nodes',
-    }
+    unless  => 'kubectl -n kube-system get pods | grep weave',
+  }
 
   exec { 'Create kube proxy service account':
     command     => 'kubectl create -f kube-proxy-sa.yaml',
@@ -73,7 +74,7 @@ class kubernetes::kube_addons (
 
   if $install_dashboard {
     exec { 'Install Kubernetes dashbaord':
-      command => 'kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml',
+      command => 'kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.6.3/src/deploy/kubernetes-dashboard.yaml',
       onlyif  => 'kubectl get nodes',
       unless  => 'kubectl -n kube-system get pods | grep kubernetes-dashboard',
       }
