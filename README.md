@@ -118,6 +118,7 @@ $
 # About the project
 
 ## What is this repo actually doing ?
+This repo is a a sandbox for the [Puppet Kubernetes module](https://forge.puppet.com/puppetlabs/kubernetes)
 Please see the road map section of the README.md to see upcoming functionality and releases of the module.
 
 ## Limitations
@@ -131,9 +132,6 @@ Here is the list of items that the module needs to at least get to a beta stage
  - [x] Multi node support
  - [x] HA controller support
  - [x] Support for both RHEL and Debian
- - [x] To add parameters to all classes
- - [x] External tooling to set up the cluster certificates and Base64 encoded bootstrap token
- - [x] Add unit tests and acceptance tests
 
 ## Road Map (For this repo)
 Here is the functionality that is on the road map for this repo
