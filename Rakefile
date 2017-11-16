@@ -168,7 +168,7 @@ task :kubectl do
        Dir.mkdir(directory_name) unless File.exists?(directory_name)
        Net::SCP.download!("127.0.0.1", "root",
 	 "/etc/kubernetes/admin.conf", ".kube/",
-         :ssh => { :port => 2222,:password => "puppet" })
+         :ssh => { :port => 9999,:password => "puppet" })
        puts "Configuring local Kubectl"
        puts "To use kubectl 'export KUBECONFIG=.kube/admin.conf' in your terminal"
      end
