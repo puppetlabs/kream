@@ -5,6 +5,7 @@ require 'tty-spinner'
 require 'logger'
 require 'os'
 require 'yaml'
+require 'net/scp'
 
 desc "Build your cluster"
 task :build  do
@@ -82,12 +83,12 @@ task :ha_controllers do
          puts "Running the load balancer"
 	 system('docker run -d --net=host --name nginx puppet/nginx > /dev/null 2>&1')
        end
-        def logs
-	    directory_name = "#{Dir.pwd}/.log/"
-	    Dir.mkdir(directory_name) unless File.exists?(directory_name)
-	    STDOUT.reopen("#{Dir.pwd}/.log/cluster-build.log", "w")
-            logger = Logger.new($stdout)
-	  end
+       def logs
+	 directory_name = "#{Dir.pwd}/.log/"
+	 Dir.mkdir(directory_name) unless File.exists?(directory_name)
+	 STDOUT.reopen("#{Dir.pwd}/.log/cluster-build.log", "w")
+         logger = Logger.new($stdout)
+       end
 	  def pre_checks
             boxes = ['puppetlabs/centos-7.2-64-puppet', 'puppetlabs/ubuntu-16.04-64-puppet']
             boxes.each do |box|
@@ -147,8 +148,8 @@ task :ha_controllers do
 	  spinner.stop('Kubernetes HA controller cluster is ready')
           puts "You can access your cluster with 'kubectl get nodes'"
         end
-     kube_controller_ha
-  end
+      kube_controller_ha
+    end
 
 desc "Set up local Kubectl"
 task :kubectl do
@@ -165,15 +166,9 @@ task :kubectl do
      def kubectl
        directory_name = ".kube/"
        Dir.mkdir(directory_name) unless File.exists?(directory_name)
-       FileUtils.copy('modules/kubernetes/templates/admin.conf.erb', '.kube/admin.conf')
-       hiera = YAML.load_file('hieradata/global.yaml')
-       cert = "#{hiera['kubernetes::certificate_authority_data']}"
-       client_data = "#{hiera['kubernetes::client_certificate_data_admin']}"
-       client_key = "#{hiera['kubernetes::client_key_data_admin']}"
-       File.write(".kube/admin.conf",File.open(".kube/admin.conf",&:read).gsub("<%= @certificate_authority_data %>",cert))
-       File.write(".kube/admin.conf",File.open(".kube/admin.conf",&:read).gsub("<%= @client_certificate_data_admin %>",client_data))
-       File.write(".kube/admin.conf",File.open(".kube/admin.conf",&:read).gsub("<%= @client_key_data_admin %>",client_key))
-       File.write(".kube/admin.conf",File.open(".kube/admin.conf",&:read).gsub("<%= @kubernetes_fqdn %>","kubernetes"))
+       Net::SCP.download!("127.0.0.1", "root",
+	 "/etc/kubernetes/admin.conf", ".kube/",
+         :ssh => { :port => 9999,:password => "puppet" })
        puts "Configuring local Kubectl"
        puts "To use kubectl 'export KUBECONFIG=.kube/admin.conf' in your terminal"
      end
