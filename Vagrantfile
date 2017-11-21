@@ -27,7 +27,7 @@ servers.each do |servers|
 
 
    servers["forward_ports"].each do |port|
-     srv.vm.network :forwarded_port, guest: port["guest"], host: port["host"]
+     srv.vm.network :forwarded_port, guest: port["guest"], host: port["host"], id: port["id"]
   end
 
    srv.vm.provider :virtualbox do |v|
