@@ -10,5 +10,6 @@ mod 'puppetlabs/stdlib'
 mod 'puppetlabs/apt'
 mod 'stahnma-epel'
 mod 'puppet-archive'
+mod 'maestrodev-wget'
 mod 'puppetlabs/kubernetes'
-mod 'puppetlabs/helm', :git => "https://github.com/puppetlabs/puppetlabs-helm.git"
+mod 'puppetlabs/helm'
