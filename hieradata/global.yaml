@@ -318,6 +318,6 @@ kubernetes::etcd_initial_cluster: etcd-kube-master=http://172.17.10.101:2380,etc
 kubernetes::etcd_ip: "%{::ipaddress_enp0s8}"
 kubernetes::kube_api_advertise_address: "%{::ipaddress_enp0s8}"
 kubernetes::install_dashboard: true
-+kubernetes::kubernetes_package_version: '1.7.3-00'
-+kubernetes::kubernetes_version: '1.7.3'
-+kubernetes::container_runtime: docker
+kubernetes::kubernetes_package_version: '1.7.3-00'
+kubernetes::kubernetes_version: '1.7.3'
+kubernetes::container_runtime: docker
