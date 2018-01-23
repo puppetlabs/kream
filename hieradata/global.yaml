@@ -321,3 +321,5 @@ kubernetes::install_dashboard: true
 kubernetes::kubernetes_package_version: '1.9.2-00'
 kubernetes::kubernetes_version: '1.9.2'
 kubernetes::container_runtime: cri_containerd
+kubernetes::cni_version: '0.6.0-00'
+kubernetes::taint_master: false
