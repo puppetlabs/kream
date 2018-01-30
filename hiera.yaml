@@ -2,6 +2,6 @@
   - yaml
 :hierarchy:
   - etcd
-  - global
+  - "%{osfamily}"
 :yaml:
   :datadir: /vagrant/hieradata
