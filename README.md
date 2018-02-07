@@ -2,6 +2,7 @@
 ```
 Prerequisites:
 - Vagrant
+- Virtualbox v5.x 
 - Ruby v2.3.3
 ```
 # Basic setup instructions
