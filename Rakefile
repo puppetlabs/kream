@@ -17,7 +17,7 @@ task :build  do
             logger = Logger.new($stdout)
 	  end
 	  def pre_checks
-            boxes = ['puppetlabs/centos-7.2-64-puppet', 'puppetlabs/ubuntu-16.04-64-puppet']
+	    boxes = ['bento/centos-7.4', 'bento/ubuntu-16.04']
             boxes.each do |box|
               dist = File.read("#{Dir.pwd}/servers.yaml")
               installed = dist.include?(box)
@@ -166,11 +166,16 @@ task :kubectl do
      def kubectl
        directory_name = ".kube/"
        Dir.mkdir(directory_name) unless File.exists?(directory_name)
-       Net::SCP.download!("127.0.0.1", "root",
+       if File.foreach("servers.yaml").grep(/ubuntu/).any?
+         user = "vagrant"
+       else
+         user = "root"	       
+       Net::SCP.download!("127.0.0.1", user,
 	 "/etc/kubernetes/admin.conf", ".kube/",
-         :ssh => { :port => 9999,:password => "puppet" })
+         :ssh => { :port => 9999,:password => "vagrant" })
        puts "Configuring local Kubectl"
        puts "To use kubectl 'export KUBECONFIG=.kube/admin.conf' in your terminal"
+       end
      end
      post_checks
      kubectl
