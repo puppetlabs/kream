@@ -315,7 +315,7 @@ kubernetes::bootstrap_token_usage_bootstrap_signing: dHJ1ZQ==
  
 kubernetes::kubernetes_version: 1.9.2
 kubernetes::kubernetes_package_version: 1.9.2
-kubernetes::container_runtime: cri_containerd
+kubernetes::container_runtime: docker
 kubernetes::cni_version: 0.6.0
 kubernetes::kubernetes_fqdn: kubernetes
 kubernetes::bootstrap_controller_ip: 172.17.10.101
