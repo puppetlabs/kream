@@ -170,12 +170,12 @@ task :kubectl do
          user = "vagrant"
        else
          user = "root"	       
+       end
        Net::SCP.download!("127.0.0.1", user,
 	 "/etc/kubernetes/admin.conf", ".kube/",
          :ssh => { :port => 9999,:password => "vagrant" })
        puts "Configuring local Kubectl"
        puts "To use kubectl 'export KUBECONFIG=.kube/admin.conf' in your terminal"
-       end
      end
      post_checks
      kubectl
