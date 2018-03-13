@@ -313,8 +313,8 @@ kubernetes::bootstrap_token_expiration: MjAyNy0wMy0xMFQwMzoyMjoxMVoNCg==
 kubernetes::bootstrap_token_usage_bootstrap_authentication: dHJ1ZQ==
 kubernetes::bootstrap_token_usage_bootstrap_signing: dHJ1ZQ==
 
-kubernetes::kubernetes_version: 1.9.2
-kubernetes::kubernetes_package_version: 1.9.2-00
+kubernetes::kubernetes_version: 1.9.4
+kubernetes::kubernetes_package_version: 1.9.4-00
 kubernetes::container_runtime: cri_containerd
 kubernetes::cni_network_provider: https://cloud.weave.works/k8s/net?k8s-version=$(kubectl
   version | base64 | tr -d "\n")
@@ -328,4 +328,4 @@ kubernetes::etcd_ip: "%{::ipaddress_eth1}"
 kubernetes::kube_api_advertise_address: "%{::ipaddress_eth1}"
 kubernetes::install_dashboard: true
 kubernetes::taint_master: false
-helm::version: 2.8.1
+helm::version: 2.8.2
