@@ -313,8 +313,8 @@ kubernetes::bootstrap_token_expiration: MjAyNy0wMy0xMFQwMzoyMjoxMVoNCg==
 kubernetes::bootstrap_token_usage_bootstrap_authentication: dHJ1ZQ==
 kubernetes::bootstrap_token_usage_bootstrap_signing: dHJ1ZQ==
 
-kubernetes::kubernetes_version: 1.9.2
-kubernetes::kubernetes_package_version: 1.9.2
+kubernetes::kubernetes_version: 1.9.4
+kubernetes::kubernetes_package_version: 1.9.4
 kubernetes::container_runtime: docker
 kubernetes::cni_version: 0.6.0
 kubernetes::kubernetes_fqdn: kubernetes
@@ -327,5 +327,5 @@ kubernetes::taint_master: false
 kubernetes::cni_network_provider: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 kubernetes::cni_cluster_cidr: "- --cluster-cidr=10.244.0.0/16"
 kubernetes::cni_node_cidr: "- --allocate-node-cidrs=true"
-helm::version: 2.8.1
+helm::version: 2.8.2
 
