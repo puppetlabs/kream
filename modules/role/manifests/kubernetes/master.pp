@@ -1,8 +1,7 @@
 class role::kubernetes::master {
 
   class {'kubernetes':
-    controller          => true,
-    bootstrap_controller => true,
+    controller => true,
   }
 
   include helm
@@ -10,7 +9,7 @@ class role::kubernetes::master {
 
   contain kubernetes
   contain helm
-  contain 'rook'
+  contain rook
 
   Class['kubernetes']
   -> Class['helm']

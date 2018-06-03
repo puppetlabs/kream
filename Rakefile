@@ -33,10 +33,6 @@ task :build  do
 	      end
             end
           end
-	  if File.exist?("hieradata/etcd.yaml")
-	    File.delete("hieradata/etcd.yaml")
-	  end
-          File.open("hieradata/etcd.yaml", "w") { |file| file.write("kubernetes::etcd_initial_cluster: etcd-kube-master=http://172.17.10.101:2380") }
 	  puts "Deploying Kuberntetes controller"
           puts "Checking for local Vagrant images"
           pre_checks
