@@ -12,6 +12,7 @@ kubernetes::api_server_count: 1
 kubernetes::install_dashboard: false
 kubernetes::controller_address: 172.17.10.101:6443
 kubernetes::token: 8fe48b.b7f45308ed734106
+kubernetes::schedule_on_controller: true
 helm::version: 2.9.1
 
 kubernetes::etcd_ca_crt: |
