@@ -6,6 +6,7 @@ require 'logger'
 require 'os'
 require 'yaml'
 require 'net/scp'
+require 'net/ssh'
 
 desc "Build your cluster"
 task :build  do
@@ -32,10 +33,6 @@ task :build  do
 	      end
             end
           end
-	  if File.exist?("hieradata/etcd.yaml")
-	    File.delete("hieradata/etcd.yaml")
-	  end
-          File.open("hieradata/etcd.yaml", "w") { |file| file.write("kubernetes::etcd_initial_cluster: etcd-kube-master=http://172.17.10.101:2380") }
 	  puts "Deploying Kuberntetes controller"
           puts "Checking for local Vagrant images"
           pre_checks
@@ -130,7 +127,7 @@ task :ha_controllers do
 	    system("vagrant up kube-master")
 	  end
           pid2 = fork do
-	    sleep 5
+	    sleep 3
 	    logs
 	    system("vagrant up kube-replica-master-01")
           end
@@ -171,8 +168,9 @@ task :kubectl do
        else
          user = "root"	       
        end
+       system("vagrant ssh kube-master -c 'sudo cp /etc/kubernetes/admin.conf . && sudo chown vagrant:vagrant admin.conf > /dev/null 2>&1'")
        Net::SCP.download!("127.0.0.1", user,
-	 "/etc/kubernetes/admin.conf", ".kube/",
+	 "/home/vagrant/admin.conf", ".kube/",
          :ssh => { :port => 9999,:password => "vagrant" })
        puts "Configuring local Kubectl"
        puts "To use kubectl 'export KUBECONFIG=.kube/admin.conf' in your terminal"
@@ -195,7 +193,7 @@ end
 
 desc "Post tasks for cluster_up"
 task :post_tasks do
-	File.write(".kube/admin.conf",File.open(".kube/admin.conf",&:read).gsub("kubernetes:6443","172.17.10.101:6443"))
+	File.write(".kube/admin.conf",File.open(".kube/admin.conf",&:read).gsub("172.17.10.101:6443","kubernetes:6443"))
 end
 
 desc "Delete your Kubernetes cluster"
@@ -216,6 +214,7 @@ desc "Automate the full build of your HA Kubernetes controllers"
 task :cluster_up_ha => [
 	:ha_controllers,
 	:kubectl,
+	:post_tasks, 
 ]
 
 desc "Automate the full build of 3 controller and 2 nodes"
@@ -223,5 +222,6 @@ task :cluster_up_all => [
 	:ha_controllers,
 	:add_nodes,
 	:kubectl,
+	:post_tasks,
 ]	
 
