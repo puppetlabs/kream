@@ -51,7 +51,7 @@ If something goes wrong with your cluster at build time you will be able to look
 
 ## HA master development
 
-If you are developing or making changes to the Puppet module for Kubernetes that changes the controller. You will need to run a separate command to build a cluster of 3 Kubernetes controllers with a load balancer. To accomplish this
+If you are developing or making changes to the Puppet module for Kubernetes that changes the controller. You will need to run a separate command to build a cluster of 3 Kubernetes controllers with a load balancer. Before running up your cluster make sure you have run the [kubetool](https://github.com/puppetlabs/puppetlabs-kubernetes#setup) and move the generated hiera files a moved into the [hieradata](https://github.com/puppetlabs/kream/tree/master/hieradata) folder. Then issue the following command.
 ```
 rake cluster_up_ha
 ```
