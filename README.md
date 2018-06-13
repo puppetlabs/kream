@@ -20,11 +20,11 @@ brew install kubectl
 ```
 On Linux
 ```
-curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.10.3/bin/linux/amd64/kubectl
 chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 ```
-Note this will install version 1.7.0, if you want a different version change the version in the url
+Note this will install version 1.10.3, if you want a different version change the version in the url
 
 ## Run the cluster
 
