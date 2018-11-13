@@ -152,7 +152,7 @@ desc "Set up local Kubectl"
 task :kubectl do
      def post_checks
        puts "Checking if kubectl is installed"
-       if File.exist?('/usr/local/bin/kubectl')
+       if File.exist?('/usr/local/bin/kubectl') or ('/usr/bin/kubectl') 
          puts "kubectl is installed"
        else
          puts "Kubectl is not installed, please install using the following"
@@ -206,7 +206,6 @@ desc "Automate the full build of your Kubernetes cluster"
 task :cluster_up => [
 	:build,
 	:kubectl,
-	:post_tasks
 
 ]
 
