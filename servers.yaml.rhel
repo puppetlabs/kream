@@ -15,7 +15,7 @@
       - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
-      - { shell: 'ls /usr/bin/r10k || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
+      - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
       - { shell: 'cp /home/vagrant/kube-master/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-master/modules/* -R /tmp/modules || true'}
 
@@ -34,7 +34,7 @@
       - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
-      - { shell: 'ls /usr/bin/r10k || ln -s /usr/local/bin/r10k /usr/bin/r10k' } 
+      - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
       - { shell: 'cp /home/vagrant/kube-replica-master-01/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-replica-master-01/modules/* -R /tmp/modules || true'}
 
@@ -53,7 +53,7 @@
       - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
-      - { shell: 'ls /usr/bin/r10k || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
+      - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
       - { shell: 'cp /home/vagrant/kube-replica-master-02/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-replica-master-02/modules/* -R /tmp/modules || true'}
 
@@ -73,7 +73,7 @@
       - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
-      - { shell: 'ls /usr/bin/r10k || ln -s /usr/local/bin/r10k /usr/bin/r10k' }  
+      - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
       - { shell: 'cp /home/vagrant/kube-node-01/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-node-01/modules/* -R /tmp/modules || true'}
 
@@ -92,7 +92,7 @@
       - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
-      - { shell: 'ls /usr/bin/r10k || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
+      - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
       - { shell: 'cp /home/vagrant/kube-node-02/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-node-02/modules/* -R /tmp/modules || true'}
 
