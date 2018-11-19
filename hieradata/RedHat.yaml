@@ -6,9 +6,7 @@ kubernetes::cni_pod_cidr: 10.244.0.0/16
 kubernetes::etcd_initial_cluster: kube-master=https://172.17.10.101:2380
 kubernetes::etcd_peers:
 - 172.17.10.101
-kuberentes::etcd_version: 3.2.24
-kubernetes::etcd_archive:  etcd-v3.2.24-linux-amd64.tar.gz
-kubernetes::etcd_source: https://github.com/coreos/etcd/releases/download/v3.2.24/etcd-v3.2.24-linux-amd64.tar.gz
+kubernetes::etcd_version: 3.2.24
 kubernetes::etcd_ip: "%{::ipaddress_eth1}"
 kubernetes::kube_api_advertise_address: "%{::ipaddress_eth1}"
 kubernetes::api_server_count: 1
