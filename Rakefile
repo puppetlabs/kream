@@ -57,7 +57,7 @@ task :build  do
 	    logs
 	    system("vagrant up kube-node-02")
           end
-          puts "Depolying worker nodes"
+          puts "Deploying worker nodes"
           puts "You can check there progress with 'kubectl get nodes'"
         end
      kube_controller

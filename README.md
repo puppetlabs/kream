@@ -43,7 +43,7 @@ Configuring local Kubectl
 To use kubectl issue 'export KUBECONFIG=.kube/admin.conf' in your terminal
 Deploying Kuberntetes controller
 [(    ● )] Deploying the Kubernetes controller... Kubernetes controller is ready
-Depolying worker nodes
+Deploying worker nodes
 You can check there progress with
 kubectl get nodes
 ```
