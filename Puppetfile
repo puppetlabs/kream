@@ -14,3 +14,6 @@ mod 'maestrodev-wget'
 mod 'puppetlabs/kubernetes', :git=> 'https://github.com/puppetlabs/puppetlabs-kubernetes.git'
 mod 'puppetlabs/helm'
 mod 'puppetlabs/rook'
+mod 'herculesteam-augeasproviders_sysctl'
+mod 'herculesteam-augeasproviders_core'
+mod 'camptocamp-kmod
