@@ -16,4 +16,4 @@ mod 'puppetlabs/helm'
 mod 'puppetlabs/rook'
 mod 'herculesteam-augeasproviders_sysctl'
 mod 'herculesteam-augeasproviders_core'
-mod 'camptocamp-kmod
+mod 'camptocamp-kmod'
