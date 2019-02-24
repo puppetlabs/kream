@@ -592,10 +592,6 @@
                         "Value": {
                             "Ref": "PuppetMasterHostName"
                         }
-                    },
-                    {
-                        "Key": "lifetime",
-                        "Value": "96h"
                     }
                 ],
                 "UserData": {
@@ -621,7 +617,7 @@
                     "\n",
                     "apt-get update -y", "\n",
                     "apt-get install -y wget build-essential ruby ruby-dev", "\n",
-                    "wget \"https://s3.amazonaws.com/pe-builds/released/2017.3.10/puppet-enterprise-2017.3.10-ubuntu-16.04-amd64.tar.gz\" -O /root/puppet-installer.tar.gz", "\n",
+                    "wget \"https://pm.puppetlabs.com/cgi-bin/download.cgi?dist=ubuntu&rel=16.04&arch=amd64&ver=2019.0.0\" -O /root/puppet-installer.tar.gz", "\n",
                     "tar -xvzf /root/puppet-installer.tar.gz -C /root", "\n",
                     "\n",
                     "cat << EOF > /root/pe.conf", "\n",
@@ -853,10 +849,6 @@
                         "Value": {
                             "Ref": "KubeMasterHostName"
                         }
-                    },
-                    {
-                        "Key": "lifetime",
-                        "Value": "96h"
                     }
                 ],
                 "UserData": {
@@ -939,10 +931,6 @@
                         "Value": {
                             "Ref": "KubeReplicaMaster01HostName"
                         }
-                    },
-                    {
-                        "Key": "lifetime",
-                        "Value": "96h"
                     }
                 ],
                 "UserData": {
@@ -1025,10 +1013,6 @@
                         "Value": {
                             "Ref": "KubeReplicaMaster02HostName"
                         }
-                    },
-                    {
-                        "Key": "lifetime",
-                        "Value": "96h"
                     }
                 ],
                 "UserData": {
@@ -1111,10 +1095,6 @@
                         "Value": {
                             "Ref": "KubeNode01HostName"
                         }
-                    },
-                    {
-                        "Key": "lifetime",
-                        "Value": "96h"
                     }
                 ],
                 "UserData": {
@@ -1200,10 +1180,6 @@
                         "Value": {
                             "Ref": "KubeNode02HostName"
                         }
-                    },
-                    {
-                        "Key": "lifetime",
-                        "Value": "96h"
                     }
                 ],
                 "UserData": {
