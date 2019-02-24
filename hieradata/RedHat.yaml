@@ -1,6 +1,6 @@
-kubernetes::kubernetes_version: 1.12.2
-kubernetes::kubernetes_package_version: 1.12.2
-kubernetes::container_runtime: docker
+kubernetes::kubernetes_version: 1.13.2
+kubernetes::kubernetes_package_version: 1.13.2
+kubernetes::container_runtime: cri_containerd
 kubernetes::cni_network_provider: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 kubernetes::cni_pod_cidr: 10.244.0.0/16
 kubernetes::etcd_initial_cluster: kube-master=https://172.17.10.101:2380
@@ -14,7 +14,7 @@ kubernetes::install_dashboard: false
 kubernetes::controller_address: 172.17.10.101:6443
 kubernetes::token: 8fe48b.b7f45308ed734106
 kubernetes::schedule_on_controller: true
-helm::version: 2.9.1
+helm::version: 2.12.3
 
 kubernetes::etcd_ca_crt: |
   -----BEGIN CERTIFICATE-----

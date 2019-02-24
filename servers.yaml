@@ -17,7 +17,7 @@
       - { shell: 'cp /home/vagrant/kube-master/modules/* -R /tmp/modules || true'}
 
 -
-  box: bento/debian-9.6
+  box: bento/ubuntu-16.04
   cpu: 2
   ip: "172.17.10.210"
   name: kube-replica-master-01
@@ -26,9 +26,9 @@
   shell_commands:
       - { shell: 'echo -e "172.17.10.210 kubernetes\n172.17.10.210 kube-replica-master-01\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
       - { shell: 'ufw disable && swapoff -a' }
-      - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-stretch.deb && sudo dpkg -i puppet6-release-stretch.deb'}
+      - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
-      - { shell: 'gem install puppet_forge -v 2.2.6 && gem install r10k'}
+      - { shell: 'gem install r10k'}
       - { shell: 'cp /home/vagrant/kube-replica-master-01/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-replica-master-01/modules/* -R /tmp/modules || true'}
 
@@ -44,7 +44,7 @@
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
-      - { shell: 'gem install puppet_forge -v 2.2.6 && gem install r10k'}
+      - { shell: 'gem install r10k'}
       - { shell: 'cp /home/vagrant/kube-replica-master-02/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-replica-master-02/modules/* -R /tmp/modules || true'}
 
@@ -60,7 +60,7 @@
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
-      - { shell: 'gem install puppet_forge -v 2.2.6 && gem install r10k'}
+      - { shell: 'gem install r10k'}
       - { shell: 'cp /home/vagrant/kube-node-01/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-node-01/modules/* -R /tmp/modules || true'}
 
@@ -76,7 +76,7 @@
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
-      - { shell: 'gem install puppet_forge -v 2.2.6 && gem install r10k'}
+      - { shell: 'gem install r10k'}
       - { shell: 'cp /home/vagrant/kube-node-02/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-node-02/modules/* -R /tmp/modules || true'}
 
