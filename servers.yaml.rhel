@@ -9,10 +9,10 @@
   ram: 4096
   shell_commands:
       - { shell: 'setenforce 0 || true'}
-      - { shell: 'swapoff -a'} 
+      - { shell: 'swapoff -a'}
       - { shell: 'systemctl stop firewalld && systemctl disable firewalld'}
       - { shell: 'echo -e "172.17.10.101 kubernetes\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
-      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm'}
+      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet6/puppet6-release-el-7.noarch.rpm'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
       - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }

@@ -76,6 +76,24 @@
             }
         },
         "PublicDNS": {
+            "Description": "Public DNSName of the newly created KubeReplicaMaster01 EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "KubeReplicaMaster01",
+                    "PublicDnsName"
+                ]
+            }
+        },
+        "PublicDNS": {
+            "Description": "Public DNSName of the newly created KubeReplicaMaster02 EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "KubeReplicaMaster02",
+                    "PublicDnsName"
+                ]
+            }
+        },
+        "PublicDNS": {
             "Description": "Public DNSName of the newly created KubeNode01 EC2 instance",
             "Value": {
                 "Fn::GetAtt": [
@@ -107,6 +125,24 @@
             "Value": {
                 "Fn::GetAtt": [
                     "KubeMaster",
+                    "PublicIp"
+                ]
+            }
+        },
+        "PublicIP": {
+            "Description": "Public IP address of the newly created KubeReplicaMaster01 EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "KubeReplicaMaster01",
+                    "PublicIp"
+                ]
+            }
+        },
+        "PublicIP": {
+            "Description": "Public IP address of the newly created KubeReplicaMaster02 EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "KubeReplicaMaster02",
                     "PublicIp"
                 ]
             }
@@ -255,6 +291,36 @@
             "Description": "IP for the Puppet Master",
             "Type": "String"
         },
+        "KubeReplicaMaster01HostName": {
+            "Default": "kube-replica-master-01",
+            "Description": "The name of Kubernetes Controller instance",
+            "Type": "String"
+        },
+        "KubeReplicaMaster01DNSName": {
+            "Default": "kube-replica-master-01.kream.demo",
+            "Description": "The DNS name for the Kubernetes Replica Controller instance",
+            "Type": "String"
+        },
+        "KubeReplicaMaster01IP": {
+            "Default": "172.17.10.210",
+            "Description": "IP for the Kubernetes Replica Master 01",
+            "Type": "String"
+        },
+        "KubeReplicaMaster02HostName": {
+            "Default": "kube-replica-master-02",
+            "Description": "The name of Kubernetes Controller instance",
+            "Type": "String"
+        },
+        "KubeReplicaMaster02DNSName": {
+            "Default": "kube-replica-master-02.kream.demo",
+            "Description": "The DNS name for the Kubernetes Replica Controller instance",
+            "Type": "String"
+        },
+        "KubeReplicaMaster02IP": {
+            "Default": "172.17.10.220",
+            "Description": "IP for the Kubernetes Replica Master 02",
+            "Type": "String"
+        },
         "KubeNode01HostName": {
             "Default": "kube-node-01",
             "Description": "The name of Kubernetes worker instance",
@@ -388,6 +454,60 @@
             },
             "Type": "AWS::EC2::RouteTable"
         },
+        "sonobuoyProfile" : {
+            "Type" : "AWS::IAM::InstanceProfile",
+            "Properties" : {
+              "Path" : "/",
+              "Roles" : [
+                {
+                  "Ref" : "sonobuoyRole"
+                }
+              ]
+            }
+          },
+          "sonobuoyPolicy" : {
+            "Type" : "AWS::IAM::Policy",
+            "Properties" : {
+              "PolicyName" : "sonobuoyPolicy",
+              "PolicyDocument" : {
+                "Statement" : [
+                  {
+                    "Effect" : "Allow",
+                    "Action" : [
+                       "ec2:*",
+                      "elasticloadbalancing:*"
+                    ],
+                    "Resource" : "*"
+                  }
+                ]
+              },
+              "Roles" : [
+                {
+                  "Ref" : "sonobuoyRole"
+                }
+              ]
+            }
+          },
+          "sonobuoyRole" : {
+            "Type" : "AWS::IAM::Role",
+            "Properties" : {
+              "AssumeRolePolicyDocument": {
+                "Version" : "2012-10-17",
+                "Statement" : [
+                  {
+                    "Effect" : "Allow",
+                    "Principal" : {
+                      "Service" : ["ec2.amazonaws.com"]
+                    },
+                    "Action" : [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Path" : "/"
+            }
+          },
         "PublicSubnet": {
             "Properties": {
                 "AvailabilityZone": {
@@ -638,7 +758,7 @@
                     "EOF", "\n",
                     "/opt/puppetlabs/puppet/bin/ncedit batch --smart-update --yaml-file /root/batch.yaml", "\n",
                     "echo KreamRocks | /opt/puppetlabs/bin/puppet-access login --username admin --service-url https://puppet:4433/rbac-api --lifetime 10y", "\n",
-                    "/opt/puppetlabs/bin/puppet-code deploy demo -w", "\n",
+                    "/opt/puppetlabs/bin/puppet-code deploy kreamha -w", "\n",
 		            "mkdir -p /root/.ssh", "\n",
 		            "cat << EOF > /root/.ssh/id_rsa", "\n",
                     "-----BEGIN RSA PRIVATE KEY-----", "\n",
@@ -675,9 +795,11 @@
         		    "|1|8wZgunsEVnS5a+iucQG13/BsgBk=|4+rLc1zO1/eR5wlWcF1KayrAtVU= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJTBmuexXdoFB48rJnTUtbWrkHBwEt6O/EkXfzskMw15A0UnTu9Eenp7JBhIpZoGDQcUNSlbs0jK2zNz8qzPM+k=", "\n",
         		    "EOF", "\n",
         		    "\n",
-                    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.101 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=demo'", "\n",
-        		    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.102 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=demo'", "\n",
-        		    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.103 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=demo'", "\n",
+                    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.101 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=kreamha'", "\n",
+                    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.210 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=kreamha'", "\n",
+                    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.220 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=kreamha'", "\n",
+        		    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.102 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=kreamha'", "\n",
+        		    "ssh -t -o StrictHostKeyChecking=no root@172.17.10.103 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=kreamha'", "\n",
         		    "touch /tmp/cloudinit.complete", "\n",
                             "} > $LOG_FILE 2>&1", "\n"
                             ]
@@ -696,6 +818,9 @@
                 "KeyName": {
                     "Ref": "KeyPairName"
                 },
+                "IamInstanceProfile" : {
+                    "Ref" : "sonobuoyProfile"
+                  },
                 "NetworkInterfaces": [
                     {
                         "DeleteOnTermination": "true",
@@ -766,6 +891,170 @@
             },
             "Type": "AWS::EC2::Instance"
           },
+          "KubeReplicaMaster01": {
+            "Properties": {
+                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "kream" ]},
+                "InstanceType": {
+                    "Ref": "k8sInstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyPairName"
+                },
+                "IamInstanceProfile" : {
+                    "Ref" : "sonobuoyProfile"
+                  },
+                "NetworkInterfaces": [
+                    {
+                        "DeleteOnTermination": "true",
+                        "DeviceIndex": 0,
+                        "GroupSet": [
+                            {
+                                "Ref": "KreamSecurityGroup"
+                            }
+                        ],
+                        "PrivateIpAddresses": [
+                            {
+                                "Primary": "true",
+                                "PrivateIpAddress": {
+                                    "Ref": "KubeReplicaMaster01IP"
+                                }
+                            }
+                        ],
+                        "SubnetId": {
+                            "Ref": "PublicSubnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "KubeReplicaMaster01HostName"
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -x", "\n",
+                                "apt-get -y update", "\n",
+                                "apt-get install ruby-dev", "\n",
+                                "export HOME=/root", "\n",
+                                "LOG_FILE=/var/log/cloudinit/cloud_init.out", "\n",
+                                "mkdir -p `dirname \"$LOG_FILE\"`", "\n",
+                                "touch \"$LOG_FILE\"", "\n",
+                                "chmod 600 \"$LOG_FILE\"", "\n",
+                                "{", "\n",
+                                "\n",
+                                "echo 'Setting custom hostname'", "\n",
+                                "hostname kube-replica-master-01.kream.demo", "\n",
+		                        "echo kube-master > /etc/hostname", "\n",
+                                "\n",
+                                "private_ip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`", "\n",
+                                "echo $private_ip kube-master-replica-01>> /etc/hosts", "\n",
+                                "echo $private_ip kube-master-replica-01.kream.demo >> /etc/hosts", "\n",
+                                "echo $private_ip kubernetes >> /etc/hosts", "\n",
+                                "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
+                                "\n",
+				                "mkdir -p /root/.ssh", "\n",
+                                "cat << EOF > /root/.ssh/authorized_keys", "\n",
+                                "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDvF3ygDC5Pm8Mp95qfcWOhTyHCcVsVIVqLGCW932flrTs/AkAFsvqQDmnfVht8gFl68WM9FAyrgp7jXTdTBjV1lWgfKQ9Tsi+8h+clEC+/HszOPgb8GaxfSUhJuNsvYo2D13zee9fXRFTEUnD9hAkd2DUtwgrlHwyQgPPwz5Ng0b0StLGf8BYJZomGKIDuVtVkv3BmLgFHH4hRXEp2GQdrNdA7/GPtXzmZOHfvbUThwkKmgiVjw5Y4TWSXNQdX1UrlIZxe7traNqcbE47eRHwGg+AakY/BLUJybe2ChLnSpzAxQ+RZu4bknvG7B0/SwTZSoBXELN9bBxwBEDsPD/7n", "\n",
+                                "EOF", "\n",
+				                "chmod 664 /root/.ssh/authorized_keys", "\n",
+                                "\n",
+                                "touch /tmp/cloudinit.complete", "\n",
+                                "} > $LOG_FILE 2>&1", "\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+          },
+          "KubeReplicaMaster02": {
+            "Properties": {
+                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "kream" ]},
+                "InstanceType": {
+                    "Ref": "k8sInstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyPairName"
+                },
+                "IamInstanceProfile" : {
+                    "Ref" : "sonobuoyProfile"
+                  },
+                "NetworkInterfaces": [
+                    {
+                        "DeleteOnTermination": "true",
+                        "DeviceIndex": 0,
+                        "GroupSet": [
+                            {
+                                "Ref": "KreamSecurityGroup"
+                            }
+                        ],
+                        "PrivateIpAddresses": [
+                            {
+                                "Primary": "true",
+                                "PrivateIpAddress": {
+                                    "Ref": "KubeReplicaMaster02IP"
+                                }
+                            }
+                        ],
+                        "SubnetId": {
+                            "Ref": "PublicSubnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "KubeReplicaMaster02HostName"
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -x", "\n",
+                                "apt-get -y update", "\n",
+                                "apt-get install ruby-dev", "\n",
+                                "export HOME=/root", "\n",
+                                "LOG_FILE=/var/log/cloudinit/cloud_init.out", "\n",
+                                "mkdir -p `dirname \"$LOG_FILE\"`", "\n",
+                                "touch \"$LOG_FILE\"", "\n",
+                                "chmod 600 \"$LOG_FILE\"", "\n",
+                                "{", "\n",
+                                "\n",
+                                "echo 'Setting custom hostname'", "\n",
+                                "hostname kube-replica-master-02.kream.demo", "\n",
+		                        "echo kube-replica-master-02 > /etc/hostname", "\n",
+                                "\n",
+                                "private_ip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`", "\n",
+                                "echo $private_ip kube-master-replica-02>> /etc/hosts", "\n",
+                                "echo $private_ip kube-master-replica-02.kream.demo >> /etc/hosts", "\n",
+                                "echo $private_ip kubernetes >> /etc/hosts", "\n",
+                                "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
+                                "\n",
+				                "mkdir -p /root/.ssh", "\n",
+                                "cat << EOF > /root/.ssh/authorized_keys", "\n",
+                                "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDvF3ygDC5Pm8Mp95qfcWOhTyHCcVsVIVqLGCW932flrTs/AkAFsvqQDmnfVht8gFl68WM9FAyrgp7jXTdTBjV1lWgfKQ9Tsi+8h+clEC+/HszOPgb8GaxfSUhJuNsvYo2D13zee9fXRFTEUnD9hAkd2DUtwgrlHwyQgPPwz5Ng0b0StLGf8BYJZomGKIDuVtVkv3BmLgFHH4hRXEp2GQdrNdA7/GPtXzmZOHfvbUThwkKmgiVjw5Y4TWSXNQdX1UrlIZxe7traNqcbE47eRHwGg+AakY/BLUJybe2ChLnSpzAxQ+RZu4bknvG7B0/SwTZSoBXELN9bBxwBEDsPD/7n", "\n",
+                                "EOF", "\n",
+				                "chmod 664 /root/.ssh/authorized_keys", "\n",
+                                "\n",
+                                "touch /tmp/cloudinit.complete", "\n",
+                                "} > $LOG_FILE 2>&1", "\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+          },
         "KubeNode01": {
             "Properties": {
                 "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "kream" ]},
@@ -775,6 +1064,9 @@
                 "KeyName": {
                     "Ref": "KeyPairName"
                 },
+                "IamInstanceProfile" : {
+                    "Ref" : "sonobuoyProfile"
+                  },
                 "NetworkInterfaces": [
                     {
                         "DeleteOnTermination": "true",
@@ -823,21 +1115,21 @@
                               "\n",
                               "echo 'Setting custom hostname'", "\n",
                               "hostname kube-node-01.kream.demo", "\n",
-		              "echo kube-node-01 > /etc/hostname", "\n",
+		                      "echo kube-node-01 > /etc/hostname", "\n",
                               "\n",
                               "private_ip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`", "\n",
                               "echo $private_ip kube-node-01 >> /etc/hosts", "\n",
-		              "echo $private_ip kube-node-01.kream.demo >> /etc/hosts", "\n",
-			      "echo 172.17.10.101 kube-master >> /etc/hosts", "\n",
+		                      "echo $private_ip kube-node-01.kream.demo >> /etc/hosts", "\n",
+			                  "echo 172.17.10.101 kube-master >> /etc/hosts", "\n",
                               "echo 172.17.10.101 kube-master.kream.demo >> /etc/hosts", "\n",
                               "echo 172.17.10.101 kubernetes >> /etc/hosts", "\n",
-		              "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
+		                      "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
                               "\n",
-			      "mkdir -p /root/.ssh", "\n",
+			                  "mkdir -p /root/.ssh", "\n",
                               "cat << EOF > /root/.ssh/authorized_keys", "\n",
                               "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDvF3ygDC5Pm8Mp95qfcWOhTyHCcVsVIVqLGCW932flrTs/AkAFsvqQDmnfVht8gFl68WM9FAyrgp7jXTdTBjV1lWgfKQ9Tsi+8h+clEC+/HszOPgb8GaxfSUhJuNsvYo2D13zee9fXRFTEUnD9hAkd2DUtwgrlHwyQgPPwz5Ng0b0StLGf8BYJZomGKIDuVtVkv3BmLgFHH4hRXEp2GQdrNdA7/GPtXzmZOHfvbUThwkKmgiVjw5Y4TWSXNQdX1UrlIZxe7traNqcbE47eRHwGg+AakY/BLUJybe2ChLnSpzAxQ+RZu4bknvG7B0/SwTZSoBXELN9bBxwBEDsPD/7n", "\n",
                               "EOF", "\n",
-			      "chmod 664 /root/.ssh/authorized_keys", "\n",
+			                  "chmod 664 /root/.ssh/authorized_keys", "\n",
                               "\n",
                               "touch /tmp/cloudinit.complete", "\n",
                               "} > $LOG_FILE 2>&1", "\n"
@@ -857,6 +1149,9 @@
                 "KeyName": {
                     "Ref": "KeyPairName"
                 },
+                "IamInstanceProfile" : {
+                    "Ref" : "sonobuoyProfile"
+                  },
                 "NetworkInterfaces": [
                     {
                         "DeleteOnTermination": "true",
@@ -905,21 +1200,20 @@
                              "\n",
                              "echo 'Setting custom hostname'", "\n",
                              "hostname kube-node-02.kream.demo", "\n",
-		             "echo kube-node-02 > /etc/hostname", "\n",
+		                     "echo kube-node-02 > /etc/hostname", "\n",
                              "\n",
                              "private_ip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`", "\n",
                              "echo $private_ip kube-node-02 >> /etc/hosts", "\n",
-		             "echo $private_ip kube-node-02.kream.demo >> /etc/hosts", "\n",
-			     "echo 172.17.10.101 kube-master >> /etc/hosts", "\n",
+		                     "echo 172.17.10.101 kube-master >> /etc/hosts", "\n",
                              "echo 172.17.10.101 kube-master.kream.demo >> /etc/hosts", "\n",
                              "echo 172.17.10.101 kubernetes >> /etc/hosts", "\n",
-		             "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
+		                     "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
                              "\n",
-			     "mkdir -p /root/.ssh", "\n",
+			                 "mkdir -p /root/.ssh", "\n",
                              "cat << EOF > /root/.ssh/authorized_keys", "\n",
                              "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDvF3ygDC5Pm8Mp95qfcWOhTyHCcVsVIVqLGCW932flrTs/AkAFsvqQDmnfVht8gFl68WM9FAyrgp7jXTdTBjV1lWgfKQ9Tsi+8h+clEC+/HszOPgb8GaxfSUhJuNsvYo2D13zee9fXRFTEUnD9hAkd2DUtwgrlHwyQgPPwz5Ng0b0StLGf8BYJZomGKIDuVtVkv3BmLgFHH4hRXEp2GQdrNdA7/GPtXzmZOHfvbUThwkKmgiVjw5Y4TWSXNQdX1UrlIZxe7traNqcbE47eRHwGg+AakY/BLUJybe2ChLnSpzAxQ+RZu4bknvG7B0/SwTZSoBXELN9bBxwBEDsPD/7n", "\n",
                              "EOF", "\n",
-			     "chmod 664 /root/.ssh/authorized_keys", "\n",
+			                 "chmod 664 /root/.ssh/authorized_keys", "\n",
                              "\n",
                              "touch /tmp/cloudinit.complete", "\n",
                              "} > $LOG_FILE 2>&1", "\n"
@@ -967,6 +1261,48 @@
                 },
                 "Name": "kube-master.kream.demo",
                 "ResourceRecords": [{ "Ref": "KubeMasterIP"}],
+                "TTL": "900",
+                "Type": "A"
+            },
+            "Type": "AWS::Route53::RecordSet"
+        },
+        "KubeReplicaMaster01DNSRecord": {
+            "DependsOn": "HostedZone",
+            "Properties": {
+                "HostedZoneId": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "/hostedzone/",
+                            {
+                                "Ref": "HostedZone"
+                            }
+                        ]
+                    ]
+                },
+                "Name": "kube-replica-master-01.kream.demo",
+                "ResourceRecords": [{ "Ref": "KubeReplicaMaster01IP"}],
+                "TTL": "900",
+                "Type": "A"
+            },
+            "Type": "AWS::Route53::RecordSet"
+        },
+        "KubeReplicaMaster02DNSRecord": {
+            "DependsOn": "HostedZone",
+            "Properties": {
+                "HostedZoneId": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "/hostedzone/",
+                            {
+                                "Ref": "HostedZone"
+                            }
+                        ]
+                    ]
+                },
+                "Name": "kube-replica-master-02.kream.demo",
+                "ResourceRecords": [{ "Ref": "KubeReplicaMaster02IP"}],
                 "TTL": "900",
                 "Type": "A"
             },
