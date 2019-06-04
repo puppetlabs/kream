@@ -30,9 +30,19 @@ servers.each do |servers|
      srv.vm.network :forwarded_port, guest: port["guest"], host: port["host"], id: port["id"]
   end
 
-   srv.vm.provider :virtualbox do |v|
-        v.cpus = servers["cpu"]
-        v.memory = servers["ram"]
+  if !!File::ALT_SEPARATOR
+    srv.vm.provider :virtualbox do |v|
+      v.cpus = servers["cpu"]
+      v.memory = servers["ram"]
+    end
+  else
+    srv.vm.provider :hyperv do |hv|
+      hv.cpus = servers["cpu"]
+      hv.maxmemory = servers["ram"]
+      hv.vm_integration_services = {
+        guest_service_interface: true
+      }
+    end
   end
 
     srv.vm.synced_folder "./", "/home/vagrant/#{servers['name']}"
