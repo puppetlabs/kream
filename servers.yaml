@@ -12,6 +12,7 @@
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
+      - { shell: 'gem install cri --version 2.15.6'}
       - { shell: 'gem install r10k'}
       - { shell: 'cp /home/vagrant/kube-master/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-master/modules/* -R /tmp/modules || true'}
@@ -28,6 +29,7 @@
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
+      - { shell: 'gem install cri --version 2.15.6'}
       - { shell: 'gem install r10k'}
       - { shell: 'cp /home/vagrant/kube-replica-master-01/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-replica-master-01/modules/* -R /tmp/modules || true'}
@@ -44,6 +46,7 @@
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
+      - { shell: 'gem install cri --version 2.15.6'}
       - { shell: 'gem install r10k'}
       - { shell: 'cp /home/vagrant/kube-replica-master-02/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-replica-master-02/modules/* -R /tmp/modules || true'}
@@ -60,6 +63,7 @@
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
+      - { shell: 'gem install cri --version 2.15.6'}
       - { shell: 'gem install r10k'}
       - { shell: 'cp /home/vagrant/kube-node-01/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-node-01/modules/* -R /tmp/modules || true'}
@@ -76,6 +80,7 @@
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
+      - { shell: 'gem install cri --version 2.15.6'}
       - { shell: 'gem install r10k'}
       - { shell: 'cp /home/vagrant/kube-node-02/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
       - { shell: 'cp /home/vagrant/kube-node-02/modules/* -R /tmp/modules || true'}
