@@ -1,0 +1,95 @@
+---
+-
+  box: bento/ubuntu-16.04
+  cpu: 2
+  ip: "172.17.10.101"
+  name: kube-master
+  forward_ports:
+    - { guest: 22, host: 9999, id: "ssh" }
+  ram: 4096
+  shell_commands:
+      - { shell: 'echo -e "172.17.10.101 kubernetes\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'ufw disable && swapoff -a' }
+      - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
+      - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
+      - { shell: 'gem install r10k'}
+      - { shell: 'cp /home/vagrant/kube-master/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
+      - { shell: 'cp /home/vagrant/kube-master/modules/* -R /tmp/modules || true'}
+
+-
+  box: bento/ubuntu-16.04
+  cpu: 2
+  ip: "172.17.10.210"
+  name: kube-replica-master-01
+  forward_ports: []
+  ram: 4096
+  shell_commands:
+      - { shell: 'echo -e "172.17.10.210 kubernetes\n172.17.10.210 kube-replica-master-01\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'ufw disable && swapoff -a' }
+      - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
+      - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
+      - { shell: 'gem install r10k'}
+      - { shell: 'cp /home/vagrant/kube-replica-master-01/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
+      - { shell: 'cp /home/vagrant/kube-replica-master-01/modules/* -R /tmp/modules || true'}
+
+-
+  box: bento/ubuntu-16.04
+  cpu: 2
+  ip: "172.17.10.220"
+  name: kube-replica-master-02
+  forward_ports: []
+  ram: 4096
+  shell_commands:
+      - { shell: 'echo -e "172.17.10.220 kubernetes\n172.17.10.220 kube-replica-master-02\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'ufw disable && swapoff -a' }
+      - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
+      - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
+      - { shell: 'gem install r10k'}
+      - { shell: 'cp /home/vagrant/kube-replica-master-02/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
+      - { shell: 'cp /home/vagrant/kube-replica-master-02/modules/* -R /tmp/modules || true'}
+
+-
+  box: bento/ubuntu-16.04
+  cpu: 2
+  ip: "172.17.10.102"
+  name: kube-node-01
+  forward_ports: []
+  ram: 4096
+  shell_commands:
+      - { shell: 'echo -e "172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'ufw disable && swapoff -a' }
+      - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
+      - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
+      - { shell: 'gem install r10k'}
+      - { shell: 'cp /home/vagrant/kube-node-01/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
+      - { shell: 'cp /home/vagrant/kube-node-01/modules/* -R /tmp/modules || true'}
+
+-
+  box: bento/ubuntu-16.04
+  cpu: 2
+  ip: "172.17.10.103"
+  name: kube-node-02
+  forward_ports: []
+  ram: 4096
+  shell_commands:
+      - { shell: 'echo -e "172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'ufw disable && swapoff -a' }
+      - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
+      - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
+      - { shell: 'gem install r10k'}
+      - { shell: 'cp /home/vagrant/kube-node-02/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
+      - { shell: 'cp /home/vagrant/kube-node-02/modules/* -R /tmp/modules || true'}
+
+-
+  box: bento/ubuntu-16.04
+  cpu: 1
+  ip: "172.17.10.214"
+  name: lb
+  forward_ports: []
+  ram: 512
+  shell_commands:
+      - { shell: 'ufw disable' }
+      - { shell: 'apt-get update -y && apt-get install vim docker.io -y' }
+      - { shell: 'cd /vagrant/lb && docker build -t puppet/nginx .'}
+      - { shell: 'docker run -d --name nginx --net=host puppet/nginx' }
+
