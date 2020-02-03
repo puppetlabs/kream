@@ -1,7 +1,7 @@
 
-kubernetes::kubernetes_version: 1.13.5
-kubernetes::kubernetes_package_version: 1.13.5
-kubernetes::container_runtime: docker
+kubernetes::kubernetes_version: 1.16.0
+kubernetes::kubernetes_package_version: 1.16.0
+kubernetes::container_runtime: cri_containerd
 kubernetes::cni_network_provider: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 kubernetes::cni_pod_cidr: 10.244.0.0/16
 kubernetes::etcd_initial_cluster: kube-master=https://172.17.10.101:2380

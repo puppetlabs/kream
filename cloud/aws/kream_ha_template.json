@@ -257,6 +257,10 @@
             "Description": "Kubernetes EC2 instance type",
             "Type": "String"
         },
+        "LifeTime": {
+            "Default": "5d",
+            "Type": "String"
+        },
         "KeyPairName": {
             "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
             "Type": "AWS::EC2::KeyPair::KeyName"
@@ -415,6 +419,12 @@
                     {
                         "Key": "Network",
                         "Value": "Public"
+                    },
+                    {
+                        "Key": "lifetime",
+                        "Value": {
+                            "Ref": "LifeTime"
+                        }
                     }
                 ]
             },
@@ -446,6 +456,12 @@
                     {
                         "Key": "Network",
                         "Value": "Public Subnet"
+                    },
+                    {
+                        "Key": "lifetime",
+                        "Value": {
+                            "Ref": "LifeTime"
+                        }
                     }
                 ],
                 "VpcId": {
@@ -536,6 +552,12 @@
                     {
                         "Key": "Role",
                         "Value": "Public Subnet"
+                    },
+                    {
+                        "Key": "lifetime",
+                        "Value": {
+                            "Ref": "LifeTime"
+                        }
                     }
                 ],
                 "VpcId": {
@@ -591,6 +613,12 @@
                         "Key": "Name",
                         "Value": {
                             "Ref": "PuppetMasterHostName"
+                        }
+                    },
+                    {
+                        "Key": "lifetime",
+                        "Value": {
+                            "Ref": "LifeTime"
                         }
                     }
                 ],
@@ -849,6 +877,12 @@
                         "Value": {
                             "Ref": "KubeMasterHostName"
                         }
+                    },
+                    {
+                        "Key": "lifetime",
+                        "Value": {
+                            "Ref": "LifeTime"
+                        }
                     }
                 ],
                 "UserData": {
@@ -930,6 +964,12 @@
                         "Key": "Name",
                         "Value": {
                             "Ref": "KubeReplicaMaster01HostName"
+                        }
+                    },
+                    {
+                        "Key": "lifetime",
+                        "Value": {
+                            "Ref": "LifeTime"
                         }
                     }
                 ],
@@ -1013,6 +1053,12 @@
                         "Value": {
                             "Ref": "KubeReplicaMaster02HostName"
                         }
+                    },
+                    {
+                        "Key": "lifetime",
+                        "Value": {
+                            "Ref": "LifeTime"
+                        }
                     }
                 ],
                 "UserData": {
@@ -1094,6 +1140,12 @@
                         "Key": "Name",
                         "Value": {
                             "Ref": "KubeNode01HostName"
+                        }
+                    },
+                    {
+                        "Key": "lifetime",
+                        "Value": {
+                            "Ref": "LifeTime"
                         }
                     }
                 ],
@@ -1179,6 +1231,12 @@
                         "Key": "Name",
                         "Value": {
                             "Ref": "KubeNode02HostName"
+                        }
+                    },
+                    {
+                        "Key": "lifetime",
+                        "Value": {
+                            "Ref": "LifeTime"
                         }
                     }
                 ],
@@ -1402,6 +1460,12 @@
                     {
                         "Key": "Network",
                         "Value": "VPN Connected VPC"
+                    },
+                    {
+                        "Key": "lifetime",
+                        "Value": {
+                            "Ref": "LifeTime"
+                        }
                     }
                 ]
             },
