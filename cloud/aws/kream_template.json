@@ -622,7 +622,7 @@
                     "\n",
                     "def define_platform_classes", "\n",
                     "  platform_classes = Array.new", "\n",
-                    "  platform_classes.push('pe_repo::platform::ubuntu_1604_amd64')", "\n",
+                    "  platform_classes.push('pe_repo::platform::ubuntu_2004_amd64')", "\n",
                     "  platform_classes", "\n",
                     "end", "\n",
                     "\n",
