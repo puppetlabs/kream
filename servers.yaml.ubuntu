@@ -1,6 +1,6 @@
 ---
 -
-  box: bento/ubuntu-20.04
+  box: bento/ubuntu-16.04
   cpu: 2
   ip: "172.17.10.101"
   name: kube-master
@@ -17,7 +17,7 @@
       - { shell: 'cp /home/vagrant/kube-master/modules/* -R /tmp/modules || true'}
 
 -
-  box: bento/ubuntu-20.04
+  box: bento/ubuntu-16.04
   cpu: 2
   ip: "172.17.10.210"
   name: kube-replica-master-01
@@ -49,7 +49,7 @@
       - { shell: 'cp /home/vagrant/kube-replica-master-02/modules/* -R /tmp/modules || true'}
 
 -
-  box: bento/ubuntu-20.04
+  box: bento/ubuntu-16.04
   cpu: 2
   ip: "172.17.10.102"
   name: kube-node-01
@@ -65,7 +65,7 @@
       - { shell: 'cp /home/vagrant/kube-node-01/modules/* -R /tmp/modules || true'}
 
 -
-  box: bento/ubuntu-20.04
+  box: bento/ubuntu-16.04
   cpu: 2
   ip: "172.17.10.103"
   name: kube-node-02
@@ -81,7 +81,7 @@
       - { shell: 'cp /home/vagrant/kube-node-02/modules/* -R /tmp/modules || true'}
 
 -
-  box: bento/ubuntu-20.04
+  box: bento/ubuntu-16.04
   cpu: 1
   ip: "172.17.10.214"
   name: lb
