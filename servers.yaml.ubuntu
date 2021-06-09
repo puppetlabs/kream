@@ -33,7 +33,7 @@
       - { shell: 'cp /home/vagrant/kube-replica-master-01/modules/* -R /tmp/modules || true'}
 
 -
-  box: bento/ubuntu-20.04
+  box: bento/ubuntu-16.04
   cpu: 2
   ip: "172.17.10.220"
   name: kube-replica-master-02
