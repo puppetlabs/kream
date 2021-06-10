@@ -43,7 +43,7 @@
                 "kream": "ami-09d2fb69"
             },
             "us-west-2": {
-                "kream": "ami-6e1a0117"
+                "kream": "ami-0437a8756312bf049"
             }
         }
     },
@@ -525,7 +525,7 @@
                     "\n",
                     "apt-get update -y", "\n",
                     "apt-get install -y wget build-essential ruby ruby-dev", "\n",
-                    "wget \"https://pm.puppetlabs.com/cgi-bin/download.cgi?dist=ubuntu&rel=16.04&arch=amd64&ver=2019.0.0\" -O /root/puppet-installer.tar.gz", "\n",
+                    "wget \"https://pm.puppet.com/cgi-bin/download.cgi?dist=ubuntu&rel=18.04&arch=amd64&ver=latest\" -O /root/puppet-installer.tar.gz", "\n",
                     "tar -xvzf /root/puppet-installer.tar.gz -C /root", "\n",
                     "\n",
                     "cat << EOF > /root/pe.conf", "\n",
