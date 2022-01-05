@@ -8,7 +8,7 @@ forge 'http://forge.puppetlabs.com'
 
 mod 'puppetlabs/stdlib'
 mod 'puppetlabs/apt'
-mod 'stahnma-epel'
+mod 'puppet-epel'
 mod 'puppet-archive'
 mod 'puppet-wget'
 mod 'puppetlabs/kubernetes'
