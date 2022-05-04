@@ -1,8 +1,8 @@
 ---
 -
-  box: bento/centos-7.5
+  box: bento/centos-7
   cpu: 2
-  ip: "172.17.10.101"
+  ip: "192.168.56.101"
   name: kube-master
   forward_ports:
     - { guest: 22, host: 9999, id: "ssh" }
@@ -11,8 +11,8 @@
       - { shell: 'setenforce 0 || true'}
       - { shell: 'swapoff -a'}
       - { shell: 'systemctl stop firewalld && systemctl disable firewalld'}
-      - { shell: 'echo -e "172.17.10.101 kubernetes\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
-      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet6/puppet6-release-el-7.noarch.rpm'}
+      - { shell: 'echo -e "192.168.56.101 kubernetes\n192.168.56.101 kube-master\n192.168.56.102 kube-node-01\n192.168.56.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet6/puppet6-release-el-7.noarch.rpm || true'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
       - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
@@ -20,9 +20,9 @@
       - { shell: 'cp /home/vagrant/kube-master/modules/* -R /tmp/modules || true'}
 
 -
-  box: bento/centos-7.5
+  box: bento/centos-7
   cpu: 2
-  ip: "172.17.10.210"
+  ip: "192.168.56.210"
   name: kube-replica-master-01
   forward_ports: []
   ram: 4096
@@ -30,8 +30,8 @@
       - { shell: 'setenforce 0 || true'}
       - { shell: 'swapoff -a'}   
       - { shell: 'systemctl stop firewalld && systemctl disable firewalld'}
-      - { shell: 'echo -e "172.17.10.210 kubernetes\n172.17.10.210 kube-replica-master-01\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
-      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm'}
+      - { shell: 'echo -e "192.168.56.210 kubernetes\n192.168.56.210 kube-replica-master-01\n192.168.56.101 kube-master\n192.168.56.102 kube-node-01\n192.168.56.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm || true'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
       - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
@@ -39,9 +39,9 @@
       - { shell: 'cp /home/vagrant/kube-replica-master-01/modules/* -R /tmp/modules || true'}
 
 -
-  box: bento/centos-7.5
+  box: bento/centos-7
   cpu: 2
-  ip: "172.17.10.220"
+  ip: "192.168.56.220"
   name: kube-replica-master-02
   forward_ports: []   
   ram: 4096
@@ -49,8 +49,8 @@
       - { shell: 'setenforce 0 || true'}
       - { shell: 'swapoff -a'}    
       - { shell: 'systemctl stop firewalld && systemctl disable firewalld'}
-      - { shell: 'echo -e "172.17.10.210 kubernetes\n172.17.10.110 kube-replica-master-01\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
-      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm'}
+      - { shell: 'echo -e "192.168.56.210 kubernetes\n192.168.56.110 kube-replica-master-01\n192.168.56.101 kube-master\n192.168.56.102 kube-node-01\n192.168.56.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm || true'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
       - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
@@ -59,9 +59,9 @@
 
 
 -
-  box: bento/centos-7.5
+  box: bento/centos-7
   cpu: 2
-  ip: "172.17.10.102"
+  ip: "192.168.56.102"
   name: kube-node-01
   forward_ports: []  
   ram: 4096
@@ -69,8 +69,8 @@
       - { shell: 'setenforce 0 || true'}
       - { shell: 'swapoff -a'}    
       - { shell: 'systemctl stop firewalld && systemctl disable firewalld'}
-      - { shell: 'echo -e "172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
-      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm'}
+      - { shell: 'echo -e "192.168.56.101 kube-master\n192.168.56.102 kube-node-01\n192.168.56.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm || true'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
       - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
@@ -78,9 +78,9 @@
       - { shell: 'cp /home/vagrant/kube-node-01/modules/* -R /tmp/modules || true'}
 
 -
-  box: bento/centos-7.5
+  box: bento/centos-7
   cpu: 2
-  ip: "172.17.10.103"
+  ip: "192.168.56.103"
   name: kube-node-02
   forward_ports: []
   ram: 4096
@@ -88,8 +88,8 @@
       - { shell: 'setenforce 0 || true'}
       - { shell: 'swapoff -a'}   
       - { shell: 'systemctl stop firewalld && systemctl disable firewalld'}
-      - { shell: 'echo -e "172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
-      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm'}
+      - { shell: 'echo -e "192.168.56.101 kube-master\n192.168.56.102 kube-node-01\n192.168.56.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'rpm -q puppet5-release-5.0.0-4.el7.noarch || sudo rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm || true'}
       - { shell: 'yum install vim git puppet-agent rubygems ruby-devel -y' }
       - { shell: 'gem install r10k -v 2.6.3'}
       - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
@@ -97,9 +97,9 @@
       - { shell: 'cp /home/vagrant/kube-node-02/modules/* -R /tmp/modules || true'}
 
 -
-  box: bento/centos-7.5
+  box: bento/centos-7
   cpu: 1
-  ip: "172.17.10.214"
+  ip: "192.168.56.214"
   name: lb
   forward_ports: []
   ram: 512

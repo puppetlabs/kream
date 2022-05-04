@@ -9,8 +9,8 @@
 
    upstream kubernetes {
 
-    server 172.17.10.101:6443 max_fails=3 fail_timeout=2s weight=5;
-    server 172.17.10.210:6443 max_fails=3 fail_timeout=1s;
-    server 172.17.10.220:6443 max_fails=3 fail_timeout=1s;
+    server 192.168.56.101:6443 max_fails=3 fail_timeout=2s weight=5;
+    server 192.168.56.210:6443 max_fails=3 fail_timeout=1s;
+    server 192.168.56.220:6443 max_fails=3 fail_timeout=1s;
     }
 }

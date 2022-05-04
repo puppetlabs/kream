@@ -240,7 +240,7 @@
             "Type": "String"
         },
         "PuppetMasterIP": {
-            "Default": "172.17.10.100",
+            "Default": "192.168.56.100",
             "Description": "IP for the Puppet Master",
             "Type": "String"
         },
@@ -255,7 +255,7 @@
             "Type": "String"
         },
         "KubeMasterIP": {
-            "Default": "172.17.10.101",
+            "Default": "192.168.56.101",
             "Description": "IP for the Puppet Master",
             "Type": "String"
         },
@@ -270,7 +270,7 @@
             "Type": "String"
         },
         "KubeNode01IP": {
-            "Default": "172.17.10.102",
+            "Default": "192.168.56.102",
             "Description": "IP for the Kubernetes Controller",
             "Type": "String"
         },
@@ -285,7 +285,7 @@
             "Type": "String"
         },
         "KubeNode02IP": {
-            "Default": "172.17.10.103",
+            "Default": "192.168.56.103",
             "Description": "IP for the Kubernetes Controller",
             "Type": "String"
         },
@@ -297,7 +297,7 @@
         },
         "SubnetCIDR": {
             "AllowedPattern": "[a-zA-Z0-9]+\\..+",
-            "Default": "172.17.10.0/24",
+            "Default": "192.168.56.0/24",
             "Description": "CIDR block for the public subnet",
             "Type": "String"
         },
@@ -690,9 +690,9 @@
                                 "|1|8wZgunsEVnS5a+iucQG13/BsgBk=|4+rLc1zO1/eR5wlWcF1KayrAtVU= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJTBmuexXdoFB48rJnTUtbWrkHBwEt6O/EkXfzskMw15A0UnTu9Eenp7JBhIpZoGDQcUNSlbs0jK2zNz8qzPM+k=", "\n",
                                 "EOF", "\n",
                                 "\n",
-                                "ssh -t -o StrictHostKeyChecking=no root@172.17.10.101 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=production'", "\n",
-                                "ssh -t -o StrictHostKeyChecking=no root@172.17.10.102 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=production'", "\n",
-                                "ssh -t -o StrictHostKeyChecking=no root@172.17.10.103 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=production'", "\n",
+                                "ssh -t -o StrictHostKeyChecking=no root@192.168.56.101 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=production'", "\n",
+                                "ssh -t -o StrictHostKeyChecking=no root@192.168.56.102 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=production'", "\n",
+                                "ssh -t -o StrictHostKeyChecking=no root@192.168.56.103 'curl -sk https://puppet:8140/packages/current/install.bash | /bin/bash -s agent:environment=production'", "\n",
                                 "touch /tmp/cloudinit.complete", "\n",
                                 "} > $LOG_FILE 2>&1", "\n"
                             ]
@@ -762,7 +762,7 @@
                                 "echo $private_ip kube-master >> /etc/hosts", "\n",
                                 "echo $private_ip kube-master.kream.demo >> /etc/hosts", "\n",
                                 "echo $private_ip kubernetes >> /etc/hosts", "\n",
-                                "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
+                                "echo 192.168.56.100 puppet >> /etc/hosts", "\n",
                                 "\n",
                                 "mkdir -p /root/.ssh", "\n",
                                 "cat << EOF > /root/.ssh/authorized_keys", "\n",
@@ -839,10 +839,10 @@
                                 "private_ip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`", "\n",
                                 "echo $private_ip kube-node-01 >> /etc/hosts", "\n",
                                 "echo $private_ip kube-node-01.kream.demo >> /etc/hosts", "\n",
-                                "echo 172.17.10.101 kube-master >> /etc/hosts", "\n",
-                                "echo 172.17.10.101 kube-master.kream.demo >> /etc/hosts", "\n",
-                                "echo 172.17.10.101 kubernetes >> /etc/hosts", "\n",
-                                "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
+                                "echo 192.168.56.101 kube-master >> /etc/hosts", "\n",
+                                "echo 192.168.56.101 kube-master.kream.demo >> /etc/hosts", "\n",
+                                "echo 192.168.56.101 kubernetes >> /etc/hosts", "\n",
+                                "echo 192.168.56.100 puppet >> /etc/hosts", "\n",
                                 "\n",
                                 "mkdir -p /root/.ssh", "\n",
                                 "cat << EOF > /root/.ssh/authorized_keys", "\n",
@@ -919,10 +919,10 @@
                                 "private_ip=`curl http://169.254.169.254/latest/meta-data/local-ipv4`", "\n",
                                 "echo $private_ip kube-node-02 >> /etc/hosts", "\n",
                                 "echo $private_ip kube-node-02.kream.demo >> /etc/hosts", "\n",
-                                "echo 172.17.10.101 kube-master >> /etc/hosts", "\n",
-                                "echo 172.17.10.101 kube-master.kream.demo >> /etc/hosts", "\n",
-                                "echo 172.17.10.101 kubernetes >> /etc/hosts", "\n",
-                                "echo 172.17.10.100 puppet >> /etc/hosts", "\n",
+                                "echo 192.168.56.101 kube-master >> /etc/hosts", "\n",
+                                "echo 192.168.56.101 kube-master.kream.demo >> /etc/hosts", "\n",
+                                "echo 192.168.56.101 kubernetes >> /etc/hosts", "\n",
+                                "echo 192.168.56.100 puppet >> /etc/hosts", "\n",
                                 "\n",
                                 "mkdir -p /root/.ssh", "\n",
                                 "cat << EOF > /root/.ssh/authorized_keys", "\n",

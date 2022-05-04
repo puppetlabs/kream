@@ -87,7 +87,7 @@ task :ha_controllers do
       lb
     elsif OS.mac? == true
       puts 'Can not install the LB on Mac OS due to networking limitation on Docker for mac'
-      puts "add '172.17.10.214 kubernetes' to /etc/hosts as a work around"
+      puts "add '192.168.56.214 kubernetes' to /etc/hosts as a work around"
       puts 'Bringing up vagrant load balancer'
       pidlb = fork do
         logs('lb')
@@ -169,7 +169,7 @@ end
 
 desc 'Post tasks for cluster_up'
 task :post_tasks do
-  File.write('.kube/admin.conf', File.open('.kube/admin.conf', &:read).gsub('172.17.10.101:6443', 'kubernetes:6443'))
+  File.write('.kube/admin.conf', File.open('.kube/admin.conf', &:read).gsub('192.168.56.101:6443', 'kubernetes:6443'))
 end
 
 desc 'Delete your Kubernetes cluster'

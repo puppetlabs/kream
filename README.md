@@ -59,7 +59,7 @@ You will get the following output
 
 ```
 Can not install the LB on Mac OS due to networking limitation on Docker for mac
-add '172.17.10.214 kubernetes' to /etc/hosts as a work around
+add '192.168.56.214 kubernetes' to /etc/hosts as a work around
 Bringing up vagrant load balancer
 Deploying Kuberntetes HA controllers
 Checking for local Vagrant images
@@ -73,7 +73,7 @@ Configuring local Kubectl
 To use kubectl 'export KUBECONFIG=.kube/admin.conf' in your terminal
 ```
 
-`172.17.10.214` is a load balancer that will balance the traffic across the 3 Kubernetes controllers.
+`192.168.56.214` is a load balancer that will balance the traffic across the 3 Kubernetes controllers.
 
 ## Helm
 
