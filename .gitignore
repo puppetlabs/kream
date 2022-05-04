@@ -3,4 +3,4 @@ Gemfile.lock
 .kube/
 .log/
 hieradata/etcd.yaml
-
+.bundle
