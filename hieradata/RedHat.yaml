@@ -1,8 +1,8 @@
 
-kubernetes::kubernetes_version: 1.16.0
-kubernetes::kubernetes_package_version: 1.16.0
+kubernetes::kubernetes_version: 1.17.0
+kubernetes::kubernetes_package_version: 1.17.0
 kubernetes::container_runtime: cri_containerd
-kubernetes::cni_network_provider: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kubernetes::cni_network_provider: https://docs.projectcalico.org/manifests/calico-typha.yaml
 kubernetes::cni_pod_cidr: 10.244.0.0/16
 kubernetes::etcd_initial_cluster: kube-master=https://192.168.56.101:2380
 kubernetes::etcd_peers:
