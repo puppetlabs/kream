@@ -40,29 +40,23 @@ desc 'Build your cluster'
 task :build do
   def kube_controller
     puts 'Deploying Kuberntetes controller'
-    spinner = TTY::Spinner.new(':spinner Deploying the Kubernetes controller...', format: :bouncing_ball)
+    spinner = TTY::Spinner.new(':spinner :title', format: :bouncing_ball)
     spinner.auto_spin
-    pid1 = fork do
-      logs('kube-master')
-      system('vagrant up kube-master')
-    end
-    Process.wait pid1
-    ex = $?.exitstatus
-    if ex = !0
-      puts "Something went wrong ! see #{Dir.pwd}/.log/cluster-build.log for details"
-      exit 1
-    end
-    spinner.stop('Kubernetes controller is ready')
-    pid2 = fork do
-      logs('kube-node-01')
-      system('vagrant up kube-node-01')
-    end
-    pid3 = fork do
-      logs('kube-node-02')
-      system('vagrant up kube-node-02')
-    end
-    puts 'Deploying worker nodes'
-    puts "You can check there progress with 'kubectl get nodes'"
+    
+    logs('kube-master')
+    spinner.update(title: 'Deploying the Kubernetes controller ...')
+    system('vagrant up kube-master')
+    
+    logs('kube-node-01')
+    spinner.update(title: 'Deploying kube-node-01')
+    system('vagrant up kube-node-01')
+    
+    logs('kube-node-02')
+    spinner.update(title: 'Deploying kube-node-02')
+    system('vagrant up kube-node-02')
+
+    spinner.update(title: 'Cluster deployed successfully')
+    spinner.success
   end
   kube_controller
 end
