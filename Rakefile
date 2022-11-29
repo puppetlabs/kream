@@ -133,15 +133,7 @@ task :kubectl do
   def kubectl
     directory_name = '.kube/'
     Dir.mkdir(directory_name) unless File.exist?(directory_name)
-    user = if File.foreach('servers.yaml').grep(/ubuntu/).any?
-             'vagrant'
-           else
-             'root'
-           end
-    system("vagrant ssh kube-master -c 'sudo cp /etc/kubernetes/admin.conf . && sudo chown vagrant:vagrant admin.conf > /dev/null 2>&1'")
-    Net::SCP.download!('127.0.0.1', user,
-                       '/home/vagrant/admin.conf', '.kube/',
-                       ssh: { port: 9999, password: 'vagrant' })
+    system("vagrant ssh kube-master -c 'sudo cp /etc/kubernetes/admin.conf ~/share/.kube/ && sudo chown vagrant:vagrant admin.conf > /dev/null 2>&1'")
     puts 'Configuring local Kubectl'
     puts "To use kubectl 'export KUBECONFIG=.kube/admin.conf' in your terminal"
   end
