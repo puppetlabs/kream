@@ -3,4 +3,6 @@ Gemfile.lock
 .kube/
 .log/
 hieradata/etcd.yaml
+.bundle
+.DS_Store
 

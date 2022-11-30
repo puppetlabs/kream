@@ -1,9 +1,6 @@
-# -*- mode: ruby -*-
-# # vi: set ft=ruby :
-
 # Specify minimum Vagrant version and Vagrant API version
-Vagrant.require_version ">= 1.6.0"
-VAGRANTFILE_API_VERSION = "2"
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'
 
 # Require YAML module
 require 'yaml'
@@ -13,43 +10,43 @@ servers = YAML.load_file('servers.yaml')
 
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-
   # Iterate through entries in YAML file
-servers.each do |servers|
+  servers['servers'].each do |s|
+    config.vm.define s['name'] do |srv|
+      srv.vm.hostname = s['name']
 
-  config.vm.define servers["name"] do |srv|
+      srv.vm.box = s['box']
 
-    srv.vm.hostname = servers["name"]
+      srv.vm.network 'private_network', ip: s['ip']
 
-    srv.vm.box = servers["box"]
+      s['forward_ports'].each do |port|
+        srv.vm.network :forwarded_port, guest: port['guest'], host: port['host'], id: port['id']
+      end
 
-    srv.vm.network "private_network", ip: servers["ip"]
+      srv.vm.provider :virtualbox do |v|
+        v.cpus = s['cpu']
+        v.memory = s['ram']
+      end
 
+      srv.vm.synced_folder './', '/home/vagrant/share', type: 'virtualbox'
 
-   servers["forward_ports"].each do |port|
-     srv.vm.network :forwarded_port, guest: port["guest"], host: port["host"], id: port["id"]
-  end
+      servers['global_shell_commands'].each do |sh|
+        srv.vm.provision 'shell', inline: sh['shell']
+      end
 
-   srv.vm.provider :virtualbox do |v|
-        v.cpus = servers["cpu"]
-        v.memory = servers["ram"]
-  end
+      s['shell_commands'].each do |sh|
+        srv.vm.provision 'shell', inline: sh['shell']
+      end
 
-    srv.vm.synced_folder "./", "/home/vagrant/#{servers['name']}"
-
-    servers["shell_commands"].each do |sh|
-      srv.vm.provision "shell", inline: sh["shell"]
-    end
-
-    srv.vm.provision :puppet do |puppet|
-        puppet.temp_dir = "/tmp"
-        puppet.options = ['--modulepath=/tmp/modules', '--verbose', '--debug']
-        puppet.hiera_config_path = "hiera.yaml"
-        puppet.environment_path  = './'
-        puppet.environment       = 'production'
-        puppet.manifests_path    = 'manifests'
-        puppet.manifest_file     = 'default.pp'
-        end
+      srv.vm.provision :puppet do |puppet|
+          puppet.temp_dir = '/tmp'
+          puppet.options = ['--modulepath=/tmp/modules', '--verbose', '--debug']
+          puppet.hiera_config_path = 'hiera.yaml'
+          puppet.environment_path  = './'
+          puppet.environment       = 'production'
+          puppet.manifests_path    = 'manifests'
+          puppet.manifest_file     = 'default.pp'
       end
     end
   end
+end

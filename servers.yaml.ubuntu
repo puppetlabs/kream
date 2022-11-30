@@ -2,13 +2,13 @@
 -
   box: bento/ubuntu-18.04
   cpu: 2
-  ip: "172.17.10.101"
+  ip: "192.168.56.101"
   name: kube-master
   forward_ports:
     - { guest: 22, host: 9999, id: "ssh" }
   ram: 4096
   shell_commands:
-      - { shell: 'echo -e "172.17.10.101 kubernetes\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'echo -e "192.168.56.101 kubernetes\n192.168.56.101 kube-master\n192.168.56.102 kube-node-01\n192.168.56.103 kube-node-02">>/etc/hosts'}
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
@@ -19,12 +19,12 @@
 -
   box: bento/ubuntu-18.04
   cpu: 2
-  ip: "172.17.10.210"
+  ip: "192.168.56.210"
   name: kube-replica-master-01
   forward_ports: []
   ram: 4096
   shell_commands:
-      - { shell: 'echo -e "172.17.10.210 kubernetes\n172.17.10.210 kube-replica-master-01\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'echo -e "192.168.56.210 kubernetes\n192.168.56.210 kube-replica-master-01\n192.168.56.101 kube-master\n192.168.56.102 kube-node-01\n192.168.56.103 kube-node-02">>/etc/hosts'}
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
@@ -35,12 +35,12 @@
 -
   box: bento/ubuntu-18.04
   cpu: 2
-  ip: "172.17.10.220"
+  ip: "192.168.56.220"
   name: kube-replica-master-02
   forward_ports: []
   ram: 4096
   shell_commands:
-      - { shell: 'echo -e "172.17.10.220 kubernetes\n172.17.10.220 kube-replica-master-02\n172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'echo -e "192.168.56.220 kubernetes\n192.168.56.220 kube-replica-master-02\n192.168.56.101 kube-master\n192.168.56.102 kube-node-01\n192.168.56.103 kube-node-02">>/etc/hosts'}
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
@@ -51,12 +51,12 @@
 -
   box: bento/ubuntu-18.04
   cpu: 2
-  ip: "172.17.10.102"
+  ip: "192.168.56.102"
   name: kube-node-01
   forward_ports: []
   ram: 4096
   shell_commands:
-      - { shell: 'echo -e "172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'echo -e "192.168.56.101 kube-master\n192.168.56.102 kube-node-01\n192.168.56.103 kube-node-02">>/etc/hosts'}
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
@@ -67,12 +67,12 @@
 -
   box: bento/ubuntu-18.04
   cpu: 2
-  ip: "172.17.10.103"
+  ip: "192.168.56.103"
   name: kube-node-02
   forward_ports: []
   ram: 4096
   shell_commands:
-      - { shell: 'echo -e "172.17.10.101 kube-master\n172.17.10.102 kube-node-01\n172.17.10.103 kube-node-02">>/etc/hosts'}
+      - { shell: 'echo -e "192.168.56.101 kube-master\n192.168.56.102 kube-node-01\n192.168.56.103 kube-node-02">>/etc/hosts'}
       - { shell: 'ufw disable && swapoff -a' }
       - { shell: 'wget https://apt.puppetlabs.com/puppet6-release-xenial.deb && sudo dpkg -i puppet6-release-xenial.deb'}
       - { shell: 'apt-get update -y && apt-get install vim git puppet-agent rubygems ruby-dev -y' }
@@ -83,7 +83,7 @@
 -
   box: bento/ubuntu-18.04
   cpu: 1
-  ip: "172.17.10.214"
+  ip: "192.168.56.214"
   name: lb
   forward_ports: []
   ram: 512

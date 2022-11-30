@@ -40,29 +40,23 @@ desc 'Build your cluster'
 task :build do
   def kube_controller
     puts 'Deploying Kuberntetes controller'
-    spinner = TTY::Spinner.new(':spinner Deploying the Kubernetes controller...', format: :bouncing_ball)
+    spinner = TTY::Spinner.new(':spinner :title', format: :bouncing_ball)
     spinner.auto_spin
-    pid1 = fork do
-      logs('kube-master')
-      system('vagrant up kube-master')
-    end
-    Process.wait pid1
-    ex = $?.exitstatus
-    if ex = !0
-      puts "Something went wrong ! see #{Dir.pwd}/.log/cluster-build.log for details"
-      exit 1
-    end
-    spinner.stop('Kubernetes controller is ready')
-    pid2 = fork do
-      logs('kube-node-01')
-      system('vagrant up kube-node-01')
-    end
-    pid3 = fork do
-      logs('kube-node-02')
-      system('vagrant up kube-node-02')
-    end
-    puts 'Deploying worker nodes'
-    puts "You can check there progress with 'kubectl get nodes'"
+    
+    logs('kube-master')
+    spinner.update(title: 'Deploying the Kubernetes controller ...')
+    system('vagrant up kube-master')
+    
+    logs('kube-node-01')
+    spinner.update(title: 'Deploying kube-node-01')
+    system('vagrant up kube-node-01')
+    
+    logs('kube-node-02')
+    spinner.update(title: 'Deploying kube-node-02')
+    system('vagrant up kube-node-02')
+
+    spinner.update(title: 'Cluster deployed successfully')
+    spinner.success
   end
   kube_controller
 end
@@ -87,7 +81,7 @@ task :ha_controllers do
       lb
     elsif OS.mac? == true
       puts 'Can not install the LB on Mac OS due to networking limitation on Docker for mac'
-      puts "add '172.17.10.214 kubernetes' to /etc/hosts as a work around"
+      puts "add '192.168.56.214 kubernetes' to /etc/hosts as a work around"
       puts 'Bringing up vagrant load balancer'
       pidlb = fork do
         logs('lb')
@@ -139,15 +133,7 @@ task :kubectl do
   def kubectl
     directory_name = '.kube/'
     Dir.mkdir(directory_name) unless File.exist?(directory_name)
-    user = if File.foreach('servers.yaml').grep(/ubuntu/).any?
-             'vagrant'
-           else
-             'root'
-           end
-    system("vagrant ssh kube-master -c 'sudo cp /etc/kubernetes/admin.conf . && sudo chown vagrant:vagrant admin.conf > /dev/null 2>&1'")
-    Net::SCP.download!('127.0.0.1', user,
-                       '/home/vagrant/admin.conf', '.kube/',
-                       ssh: { port: 9999, password: 'vagrant' })
+    system("vagrant ssh kube-master -c 'sudo cp /etc/kubernetes/admin.conf ~/share/.kube/ && sudo chown vagrant:vagrant admin.conf > /dev/null 2>&1'")
     puts 'Configuring local Kubectl'
     puts "To use kubectl 'export KUBECONFIG=.kube/admin.conf' in your terminal"
   end
@@ -169,7 +155,7 @@ end
 
 desc 'Post tasks for cluster_up'
 task :post_tasks do
-  File.write('.kube/admin.conf', File.open('.kube/admin.conf', &:read).gsub('172.17.10.101:6443', 'kubernetes:6443'))
+  File.write('.kube/admin.conf', File.open('.kube/admin.conf', &:read).gsub('192.168.56.101:6443', 'kubernetes:6443'))
 end
 
 desc 'Delete your Kubernetes cluster'

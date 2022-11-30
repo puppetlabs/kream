@@ -4,15 +4,15 @@ class role::kubernetes::master {
     controller => true,
   }
 
-  include helm
-  include rook
+  # include helm
+  # include rook
 
   contain kubernetes
-  contain helm
-  contain rook
+  # contain helm
+  # contain rook
 
-  Class['kubernetes']
-  -> Class['helm']
-  -> Class['rook']
+  # Class['kubernetes']
+  # -> Class['helm']
+  # -> Class['rook']
 
 }

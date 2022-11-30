@@ -4,14 +4,14 @@ kubernetes::kubernetes_package_version: 1.13.5-00
 kubernetes::container_runtime: docker
 kubernetes::cni_network_provider: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 kubernetes::cni_pod_cidr: 10.244.0.0/16
-kubernetes::etcd_initial_cluster: kube-master=https://172.17.10.101:2380
+kubernetes::etcd_initial_cluster: kube-master=https://192.168.56.101:2380
 kubernetes::etcd_peers:
-- 172.17.10.101
+- 192.168.56.101
 kubernetes::etcd_ip: "%{::ipaddress_eth1}"
 kubernetes::kube_api_advertise_address: "%{::ipaddress_eth1}"
 kubernetes::api_server_count: 1
 kubernetes::install_dashboard: true
-kubernetes::controller_address: 172.17.10.101:6443
+kubernetes::controller_address: 192.168.56.101:6443
 kubernetes::token: f3e8af.61ed3db8c0a01451
 
 kubernetes::etcd_ca_crt: |
