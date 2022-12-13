@@ -8,12 +8,8 @@ global_shell_commands:
   - { shell: 'sudo rpm -Uvh https://yum.puppet.com/puppet7/puppet7-release-el-7.noarch.rpm || true'}
   - { shell: 'yum install -y puppet'}
   - { shell: 'yum install -y git git-core zlib zlib-devel gcc-c++ patch readline readline-devel libyaml-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel'}
-  - { shell: 'curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash'}
-  - { shell: 'echo eval "$(~/.rbenv/bin/rbenv init - bash)" >> ~/.bash_profile'}
-  - { shell: 'rbenv install 2.7.6 && rbenv global 2.7.6'}
-  - { shell: 'gem install r10k -v 3.15.2'}
-  - { shell: '[ -f /usr/bin/r10k ] || ln -s /usr/local/bin/r10k /usr/bin/r10k' }
-  - { shell: 'cp /home/vagrant/share/Puppetfile /tmp && cd /tmp && r10k puppetfile install --verbose' }
+  - { shell: 'sudo /opt/puppetlabs/puppet/bin/gem install r10k -v 3.15.2'}
+  - { shell: 'cp /home/vagrant/share/Puppetfile /tmp && cd /tmp && /opt/puppetlabs/puppet/bin/r10k puppetfile install --verbose' }
   - { shell: 'cp /home/vagrant/share/modules/* -R /tmp/modules || true'}
 servers:
   - box: bento/centos-7
