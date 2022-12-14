@@ -1,5 +1,4 @@
 # Specify minimum Vagrant version and Vagrant API version
-Vagrant.require_version '>= 1.6.0'
 VAGRANTFILE_API_VERSION = '2'
 
 # Require YAML module
@@ -10,6 +9,7 @@ servers = YAML.load_file('servers.yaml')
 
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
   # Iterate through entries in YAML file
   servers['servers'].each do |s|
     config.vm.define s['name'] do |srv|
@@ -17,7 +17,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       srv.vm.box = s['box']
 
-      srv.vm.network 'private_network', ip: s['ip']
+      srv.vm.network 'private_network', ip: s['ip'], name: 'HostNetwork', virtualbox__inet: true
 
       s['forward_ports'].each do |port|
         srv.vm.network :forwarded_port, guest: port['guest'], host: port['host'], id: port['id']
@@ -26,6 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       srv.vm.provider :virtualbox do |v|
         v.cpus = s['cpu']
         v.memory = s['ram']
+        v.customize ["modifyvm", :id, "--nic2", "hostonlynet", "--host-only-net2=HostNetwork"]
       end
 
       srv.vm.synced_folder './', '/home/vagrant/share', type: 'virtualbox'

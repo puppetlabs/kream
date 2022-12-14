@@ -42,15 +42,15 @@ task :build do
     puts 'Deploying Kuberntetes controller'
     spinner = TTY::Spinner.new(':spinner :title', format: :bouncing_ball)
     spinner.auto_spin
-    
+
     logs('kube-master')
     spinner.update(title: 'Deploying the Kubernetes controller ...')
     system('vagrant up kube-master')
-    
+
     logs('kube-node-01')
     spinner.update(title: 'Deploying kube-node-01')
     system('vagrant up kube-node-01')
-    
+
     logs('kube-node-02')
     spinner.update(title: 'Deploying kube-node-02')
     system('vagrant up kube-node-02')
