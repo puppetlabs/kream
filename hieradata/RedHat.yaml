@@ -1,6 +1,11 @@
-kubernetes::kubernetes_version: 1.23.0
-kubernetes::kubernetes_package_version: 1.23.0
+kubernetes::kubernetes_version: 1.26.0
+kubernetes::kubernetes_package_version: 1.26.0
 kubernetes::container_runtime: cri_containerd
+# update containerd version below based on kubenetes version specified above 
+# refer to https://containerd.io/releases/#kubernetes-support for more info
+kubernetes::containerd_version: 1.6.0
+# remove line below if using kubernetes versions < 1.25
+kubernetes::image_repository: registry.k8s.io
 kubernetes::cni_network_provider: https://docs.projectcalico.org/manifests/calico-typha.yaml
 kubernetes::cni_pod_cidr: 10.244.0.0/16
 kubernetes::etcd_initial_cluster: kube-master=https://192.168.56.101:2380
